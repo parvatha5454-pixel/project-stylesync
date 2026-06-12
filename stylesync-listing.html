@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Salons in Chennai — StyleSync</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,900;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<style>
+:root{--rose:#C9956C;--rose-lt:#E8C4A8;--rose-dk:#A87350;--plum:#4A1942;--plum-lt:#6B2E61;--plum-dk:#2E0F29;--cream:#FFF8F0;--cream-dk:#F5EDE0;--white:#FFFFFF;--text:#1A0D18;--muted:#7A5C74;--border:rgba(74,25,66,0.12);--shadow-sm:0 2px 12px rgba(74,25,66,0.08);--shadow-md:0 8px 32px rgba(74,25,66,0.12);--shadow-lg:0 24px 64px rgba(74,25,66,0.18);--font-display:'Playfair Display',Georgia,serif;--font-body:'DM Sans',sans-serif}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:var(--font-body);background:var(--cream);color:var(--text);overflow-x:hidden}
+a{text-decoration:none;color:inherit}
+button{cursor:pointer;border:none;font-family:inherit}
+ul{list-style:none}
+::-webkit-scrollbar{width:5px}
+::-webkit-scrollbar-track{background:var(--cream)}
+::-webkit-scrollbar-thumb{background:var(--rose-lt);border-radius:99px}
+.nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:0 5%;height:66px;background:rgba(255,248,240,0.92);backdrop-filter:blur(20px);border-bottom:1px solid var(--border)}
+.nav-logo{display:flex;align-items:center;gap:9px;font-family:var(--font-display);font-size:1.4rem;font-weight:700;color:var(--plum)}
+.nav-logo span{color:var(--rose)}
+.nav-logo-icon{width:34px;height:34px;background:linear-gradient(135deg,var(--rose),var(--plum));border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:1rem}
+.nav-links{display:flex;align-items:center;gap:28px;font-size:0.85rem;font-weight:500;color:var(--muted)}
+.nav-links a:hover{color:var(--plum)}
+.nav-cta{background:var(--plum);color:var(--white);padding:9px 20px;border-radius:99px;font-size:0.85rem;font-weight:500;transition:background 0.2s}
+.nav-cta:hover{background:var(--plum-lt)}
+.page-header{background:linear-gradient(135deg,var(--plum-dk) 0%,var(--plum) 60%,var(--plum-lt) 100%);padding:110px 5% 48px;position:relative;overflow:hidden}
+.page-header::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 50% 80% at 80% 50%,rgba(201,149,108,0.18) 0%,transparent 65%);pointer-events:none}
+.page-header-inner{position:relative;z-index:1}
+.breadcrumb{display:flex;align-items:center;gap:8px;font-size:0.78rem;color:rgba(255,248,240,0.5);margin-bottom:16px}
+.breadcrumb a{color:rgba(255,248,240,0.55);transition:color 0.2s}
+.breadcrumb a:hover{color:var(--rose-lt)}
+.breadcrumb span{color:var(--rose-lt);font-weight:500}
+.page-header h1{font-family:var(--font-display);font-size:clamp(1.8rem,3.5vw,3rem);font-weight:800;color:var(--white);line-height:1.15;margin-bottom:10px}
+.page-header h1 em{color:var(--rose-lt);font-style:italic}
+.page-header p{color:rgba(255,248,240,0.6);font-size:0.95rem;max-width:500px}
+.header-search{display:flex;align-items:center;gap:10px;background:rgba(255,255,255,0.1);border:1.5px solid rgba(255,255,255,0.2);border-radius:99px;padding:8px 8px 8px 20px;margin-top:24px;max-width:460px;backdrop-filter:blur(10px);transition:border-color 0.2s,background 0.2s}
+.header-search:focus-within{background:rgba(255,255,255,0.15);border-color:rgba(201,149,108,0.6)}
+.header-search input{flex:1;border:none;outline:none;background:transparent;color:var(--white);font-family:var(--font-body);font-size:0.9rem}
+.header-search input::placeholder{color:rgba(255,248,240,0.45)}
+.header-search-btn{background:var(--rose);color:var(--white);padding:9px 22px;border-radius:99px;font-size:0.82rem;font-weight:600;transition:background 0.2s;white-space:nowrap}
+.header-search-btn:hover{background:var(--rose-dk)}
+.result-bar{display:flex;align-items:center;justify-content:space-between;padding:14px 5%;background:var(--white);border-bottom:1px solid var(--border);flex-wrap:wrap;gap:12px}
+.result-count{font-size:0.85rem;color:var(--muted)}
+.result-count strong{color:var(--plum);font-weight:600}
+.sort-wrap{display:flex;align-items:center;gap:10px;font-size:0.82rem;color:var(--muted)}
+.sort-select{border:1.5px solid var(--border);border-radius:99px;padding:7px 32px 7px 16px;font-family:var(--font-body);font-size:0.82rem;color:var(--plum);background:var(--white);cursor:pointer;outline:none;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' fill='none'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%234A1942' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 10px center}
+.view-toggle{display:flex;gap:6px}
+.view-btn{width:34px;height:34px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:0.9rem;background:var(--cream);border:1.5px solid var(--border);color:var(--muted);transition:all 0.2s}
+.view-btn.active{background:var(--plum);color:var(--white);border-color:var(--plum)}
+.main-layout{display:grid;grid-template-columns:260px 1fr;gap:0;min-height:calc(100vh - 66px)}
+.sidebar{background:var(--white);border-right:1px solid var(--border);padding:28px 20px;position:sticky;top:66px;height:calc(100vh - 66px);overflow-y:auto}
+.sidebar::-webkit-scrollbar{width:4px}
+.sidebar-title{font-family:var(--font-display);font-size:1rem;font-weight:700;color:var(--plum);margin-bottom:20px;display:flex;justify-content:space-between;align-items:center}
+.clear-btn{font-size:0.72rem;color:var(--rose-dk);font-weight:500;cursor:pointer;background:none;border:none;font-family:inherit;padding:0}
+.clear-btn:hover{color:var(--rose)}
+.filter-section{margin-bottom:24px}
+.filter-label{font-size:0.72rem;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);margin-bottom:12px}
+.chip-group{display:flex;flex-wrap:wrap;gap:7px}
+.chip{padding:5px 12px;border-radius:99px;font-size:0.75rem;font-weight:500;border:1.5px solid var(--border);color:var(--muted);cursor:pointer;background:var(--cream);transition:all 0.18s}
+.chip:hover{border-color:var(--rose);color:var(--rose-dk)}
+.chip.active{background:var(--plum);color:var(--white);border-color:var(--plum)}
+.check-list{display:flex;flex-direction:column;gap:9px}
+.check-item{display:flex;align-items:center;gap:9px;cursor:pointer;padding:4px 0}
+.check-box{width:18px;height:18px;border-radius:5px;border:2px solid var(--border);background:var(--white);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all 0.18s}
+.check-item.checked .check-box{background:var(--plum);border-color:var(--plum)}
+.check-tick{width:10px;height:10px;color:var(--white);font-size:0.65rem;display:none}
+.check-item.checked .check-tick{display:block}
+.check-label{font-size:0.82rem;color:var(--text)}
+.check-count{font-size:0.72rem;color:var(--muted);margin-left:auto}
+.star-filter{display:flex;flex-direction:column;gap:8px}
+.star-row{display:flex;align-items:center;gap:8px;cursor:pointer;padding:5px 8px;border-radius:8px;transition:background 0.15s}
+.star-row:hover{background:var(--cream)}
+.star-row.active{background:rgba(201,149,108,0.12)}
+.stars-vis{color:#F5C842;font-size:0.8rem;letter-spacing:1px}
+.star-up-text{font-size:0.78rem;color:var(--muted)}
+.star-radio{width:14px;height:14px;border-radius:50%;border:2px solid var(--border);margin-left:auto;flex-shrink:0}
+.star-row.active .star-radio{background:var(--rose);border-color:var(--rose)}
+.price-labels{display:flex;justify-content:space-between;font-size:0.75rem;color:var(--muted);margin-bottom:8px}
+input[type=range]{width:100%;accent-color:var(--plum);cursor:pointer;margin-top:12px}
+.price-val{font-size:0.82rem;color:var(--plum);font-weight:600;text-align:center;margin-top:6px}
+.filter-divider{height:1px;background:var(--border);margin:4px 0 20px}
+.content{padding:28px 28px 60px;background:var(--cream)}
+.active-filters{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:20px}
+.af-pill{display:flex;align-items:center;gap:6px;background:rgba(74,25,66,0.08);border:1px solid rgba(74,25,66,0.15);border-radius:99px;padding:5px 12px;font-size:0.75rem;color:var(--plum);font-weight:500}
+.af-pill button{background:none;font-size:0.8rem;color:var(--muted);padding:0;line-height:1;transition:color 0.15s;border:none;cursor:pointer;font-family:inherit}
+.af-pill button:hover{color:var(--rose)}
+.salons-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:20px}
+.salons-grid.list-view{grid-template-columns:1fr}
+.salon-card{background:var(--white);border-radius:18px;overflow:hidden;box-shadow:var(--shadow-sm);border:1px solid var(--border);transition:all 0.28s;cursor:pointer;animation:cardIn 0.4s ease both}
+.salon-card:hover{transform:translateY(-5px);box-shadow:var(--shadow-lg)}
+.salons-grid.list-view .salon-card{display:grid;grid-template-columns:220px 1fr;border-radius:14px}
+.salons-grid.list-view .card-img{min-height:180px;border-radius:14px 0 0 14px}
+/* REAL IMAGE */
+.card-img{height:200px;position:relative;overflow:hidden;background:var(--cream-dk)}
+.card-img img{width:100%;height:100%;object-fit:cover;display:block;transition:transform 0.45s ease}
+.salon-card:hover .card-img img{transform:scale(1.07)}
+.card-img-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(30,10,28,0.45) 0%,transparent 55%)}
+.card-badge{position:absolute;top:12px;left:12px;z-index:2;background:rgba(255,255,255,0.95);backdrop-filter:blur(8px);color:var(--plum);font-size:0.68rem;font-weight:700;padding:4px 10px;border-radius:99px;box-shadow:0 2px 8px rgba(74,25,66,0.12)}
+.card-fav{position:absolute;top:12px;right:12px;z-index:2;width:30px;height:30px;border-radius:50%;background:rgba(255,255,255,0.92);backdrop-filter:blur(8px);display:flex;align-items:center;justify-content:center;font-size:0.85rem;transition:transform 0.2s;box-shadow:0 2px 8px rgba(74,25,66,0.1);border:none;cursor:pointer}
+.card-fav:hover{transform:scale(1.2)}
+.card-open{position:absolute;bottom:12px;right:12px;z-index:2;color:var(--white);font-size:0.68rem;font-weight:600;padding:3px 9px;border-radius:99px}
+.card-body{padding:18px}
+.card-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px}
+.card-name{font-family:var(--font-display);font-size:1.05rem;font-weight:700;color:var(--plum);line-height:1.2}
+.card-rating{display:flex;align-items:center;gap:3px;background:rgba(245,200,66,0.12);border:1px solid rgba(245,200,66,0.3);padding:3px 8px;border-radius:99px;font-size:0.75rem;font-weight:700;color:#9A7A00;flex-shrink:0}
+.card-meta{display:flex;align-items:center;gap:12px;margin-bottom:10px;flex-wrap:wrap}
+.card-area,.card-reviews{font-size:0.75rem;color:var(--muted)}
+.card-services{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:14px}
+.stag{background:rgba(74,25,66,0.07);color:var(--plum);font-size:0.68rem;font-weight:500;padding:3px 9px;border-radius:99px}
+.card-foot{display:flex;justify-content:space-between;align-items:center;padding-top:14px;border-top:1px solid var(--border)}
+.card-price{font-size:0.8rem;color:var(--muted)}
+.card-price strong{color:var(--rose-dk);font-size:0.95rem;font-weight:700}
+.book-btn{background:var(--plum);color:var(--white);padding:8px 18px;border-radius:99px;font-size:0.78rem;font-weight:600;transition:all 0.2s;border:none;cursor:pointer;font-family:inherit}
+.book-btn:hover{background:var(--plum-lt);transform:translateY(-1px)}
+.empty-state{text-align:center;padding:80px 20px;grid-column:1/-1}
+.empty-icon{font-size:4rem;margin-bottom:16px}
+.empty-state h3{font-family:var(--font-display);font-size:1.3rem;color:var(--plum);margin-bottom:8px}
+.empty-state p{color:var(--muted);font-size:0.88rem}
+.mobile-filter-btn{display:none;position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--plum);color:var(--white);padding:12px 28px;border-radius:99px;font-size:0.85rem;font-weight:600;z-index:50;box-shadow:var(--shadow-lg);border:none;cursor:pointer;font-family:inherit;align-items:center;gap:8px}
+.sidebar-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:80}
+@keyframes cardIn{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@media(max-width:900px){
+  .main-layout{grid-template-columns:1fr}
+  .sidebar{display:none;position:fixed;top:0;left:0;bottom:0;width:280px;z-index:90;height:100vh;border-radius:0 20px 20px 0;padding-top:72px}
+  .sidebar.open{display:block;animation:fadeIn 0.2s ease}
+  .sidebar-overlay.open{display:block}
+  .mobile-filter-btn{display:flex}
+  .content{padding:20px 16px 100px}
+  .salons-grid{grid-template-columns:repeat(auto-fill,minmax(240px,1fr))}
+}
+@media(max-width:500px){
+  .nav-links{display:none}
+  .salons-grid{grid-template-columns:1fr}
+  .salons-grid.list-view .salon-card{grid-template-columns:1fr}
+  .salons-grid.list-view .card-img{height:160px;border-radius:14px 14px 0 0}
+}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <a href="stylesync-home.html" class="nav-logo">
+    <div class="nav-logo-icon">✦</div>
+    Style<span>Sync</span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="stylesync-home.html">Home</a></li>
+    <li><a href="stylesync-listing.html" style="color:var(--plum);font-weight:600">Salons</a></li>
+    <li><a href="stylesync-detail.html">Services</a></li>
+    <li><a href="stylesync-quiz.html">AI Stylist</a></li>
+    <a href="stylesync-booking.html" class="nav-cta">Book Now</a>
+  </ul>
+</nav>
+
+<div class="page-header">
+  <div class="page-header-inner">
+    <div class="breadcrumb">
+      <a href="stylesync-home.html">Home</a>
+      <span>›</span>
+      <span>Salons in Chennai</span>
+    </div>
+    <h1>Top Salons in <em>Chennai</em></h1>
+    <p>200+ verified salons across T.Nagar, Anna Nagar, Velachery &amp; more</p>
+    <div class="header-search">
+      <input type="text" id="searchInput" placeholder="Search salon, area or service…" oninput="applyFilters()"/>
+      <button class="header-search-btn" onclick="applyFilters()">Search</button>
+    </div>
+  </div>
+</div>
+
+<div class="result-bar">
+  <div class="result-count">Showing <strong id="resultCount">0</strong> salons</div>
+  <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap">
+    <div class="sort-wrap">
+      <span>Sort by</span>
+      <select class="sort-select" id="sortSelect" onchange="applyFilters()">
+        <option value="rating">Top Rated</option>
+        <option value="price-low">Price: Low to High</option>
+        <option value="price-high">Price: High to Low</option>
+        <option value="reviews">Most Reviewed</option>
+      </select>
+    </div>
+    <div class="view-toggle">
+      <button class="view-btn active" id="gridBtn" onclick="setView('grid')" title="Grid view">⊞</button>
+      <button class="view-btn" id="listBtn" onclick="setView('list')" title="List view">☰</button>
+    </div>
+  </div>
+</div>
+
+<div class="main-layout">
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-title">Filters <button class="clear-btn" onclick="clearFilters()">Clear all</button></div>
+    <div class="filter-section">
+      <div class="filter-label">Area / Location</div>
+      <div class="chip-group" id="areaChips">
+        <div class="chip" data-area="T.Nagar" onclick="toggleChip(this)">T.Nagar</div>
+        <div class="chip" data-area="Anna Nagar" onclick="toggleChip(this)">Anna Nagar</div>
+        <div class="chip" data-area="Velachery" onclick="toggleChip(this)">Velachery</div>
+        <div class="chip" data-area="OMR" onclick="toggleChip(this)">OMR</div>
+        <div class="chip" data-area="Nungambakkam" onclick="toggleChip(this)">Nungambakkam</div>
+        <div class="chip" data-area="Adyar" onclick="toggleChip(this)">Adyar</div>
+        <div class="chip" data-area="Mylapore" onclick="toggleChip(this)">Mylapore</div>
+        <div class="chip" data-area="Porur" onclick="toggleChip(this)">Porur</div>
+      </div>
+    </div>
+    <div class="filter-divider"></div>
+    <div class="filter-section">
+      <div class="filter-label">Services</div>
+      <div class="check-list">
+        <div class="check-item" data-svc="Haircut" onclick="toggleCheck(this)"><div class="check-box"><span class="check-tick">✓</span></div><span class="check-label">Haircut & Style</span><span class="check-count">148</span></div>
+        <div class="check-item" data-svc="Bridal" onclick="toggleCheck(this)"><div class="check-box"><span class="check-tick">✓</span></div><span class="check-label">Bridal Makeup</span><span class="check-count">64</span></div>
+        <div class="check-item" data-svc="Facial" onclick="toggleCheck(this)"><div class="check-box"><span class="check-tick">✓</span></div><span class="check-label">Facial & Skin</span><span class="check-count">112</span></div>
+        <div class="check-item" data-svc="Nail" onclick="toggleCheck(this)"><div class="check-box"><span class="check-tick">✓</span></div><span class="check-label">Nail Art</span><span class="check-count">89</span></div>
+        <div class="check-item" data-svc="Spa" onclick="toggleCheck(this)"><div class="check-box"><span class="check-tick">✓</span></div><span class="check-label">Spa & Massage</span><span class="check-count">52</span></div>
+        <div class="check-item" data-svc="Hair" onclick="toggleCheck(this)"><div class="check-box"><span class="check-tick">✓</span></div><span class="check-label">Hair Colour</span><span class="check-count">130</span></div>
+      </div>
+    </div>
+    <div class="filter-divider"></div>
+    <div class="filter-section">
+      <div class="filter-label">Minimum Rating</div>
+      <div class="star-filter">
+        <div class="star-row" data-rating="4.5" onclick="setRating(this)"><span class="stars-vis">★★★★★</span><span class="star-up-text">4.5 & up</span><div class="star-radio"></div></div>
+        <div class="star-row" data-rating="4.0" onclick="setRating(this)"><span class="stars-vis">★★★★☆</span><span class="star-up-text">4.0 & up</span><div class="star-radio"></div></div>
+        <div class="star-row" data-rating="3.5" onclick="setRating(this)"><span class="stars-vis">★★★½☆</span><span class="star-up-text">3.5 & up</span><div class="star-radio"></div></div>
+        <div class="star-row active" data-rating="0" onclick="setRating(this)"><span class="stars-vis" style="color:var(--muted)">★★★☆☆</span><span class="star-up-text">All ratings</span><div class="star-radio"></div></div>
+      </div>
+    </div>
+    <div class="filter-divider"></div>
+    <div class="filter-section">
+      <div class="filter-label">Max Price</div>
+      <div class="price-labels"><span>₹200</span><span>₹5000</span></div>
+      <input type="range" min="200" max="5000" value="5000" id="priceRange" oninput="updatePrice(this)"/>
+      <div class="price-val" id="priceVal">Up to ₹5,000</div>
+    </div>
+    <div class="filter-divider"></div>
+    <div class="filter-section">
+      <div class="filter-label">Availability</div>
+      <div class="check-item" id="openNowCheck" onclick="toggleOpenNow(this)" style="padding:6px 0">
+        <div class="check-box"><span class="check-tick">✓</span></div>
+        <span class="check-label">Open Now</span>
+        <span class="check-count" style="color:#2E9E5B;font-weight:600">●</span>
+      </div>
+    </div>
+  </aside>
+
+  <div class="content">
+    <div class="active-filters" id="activePills"></div>
+    <div class="salons-grid" id="salonsGrid"></div>
+  </div>
+</div>
+
+<div class="sidebar-overlay" id="overlay" onclick="closeSidebar()"></div>
+<button class="mobile-filter-btn" onclick="openSidebar()">⚙ Filters</button>
+
+<script>
+const SALONS=[
+  {id:1,name:"Glam Studio",area:"T.Nagar",rating:4.8,reviews:320,price:499,priceLabel:"₹499",services:["Haircut","Bridal","Facial"],img:"https://images.unsplash.com/photo-1560066984-138dadb4c035?w=400&h=220&fit=crop&auto=format",tag:"Most Popular",open:true},
+  {id:2,name:"Naturals Salon",area:"Anna Nagar",rating:4.6,reviews:210,price:350,priceLabel:"₹350",services:["Hair","Skin","Nail Art"],img:"https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?w=400&h=220&fit=crop&auto=format",tag:"Best Value",open:true},
+  {id:3,name:"Lakmé Salon",area:"Velachery",rating:4.7,reviews:280,price:599,priceLabel:"₹599",services:["All Services","Bridal","Skin"],img:"https://images.unsplash.com/photo-1487412947147-5cebf100ffc2?w=400&h=220&fit=crop&auto=format",tag:"Premium",open:true},
+  {id:4,name:"Green Trends",area:"OMR",rating:4.5,reviews:175,price:399,priceLabel:"₹399",services:["Hair","Spa","Relaxation"],img:"https://images.unsplash.com/photo-1470259078422-826894b933aa?w=400&h=220&fit=crop&auto=format",tag:"Trending",open:false},
+  {id:5,name:"Toni & Guy",area:"Nungambakkam",rating:4.9,reviews:390,price:1200,priceLabel:"₹1,200",services:["Premium Hair","Colour","Treatment"],img:"https://images.unsplash.com/photo-1521590832167-7bcbfaa6381f?w=400&h=220&fit=crop&auto=format",tag:"Top Rated",open:true},
+  {id:6,name:"Enrich Salon",area:"Adyar",rating:4.6,reviews:198,price:450,priceLabel:"₹450",services:["Facial","Waxing","Nail Art"],img:"https://images.unsplash.com/photo-1604654894610-df63bc536371?w=400&h=220&fit=crop&auto=format",tag:"New",open:true},
+  {id:7,name:"Jean-Claude Biguine",area:"Nungambakkam",rating:4.7,reviews:260,price:900,priceLabel:"₹900",services:["Hair","Bridal","Colour"],img:"https://images.unsplash.com/photo-1562322140-8baeececf3df?w=400&h=220&fit=crop&auto=format",tag:"Premium",open:false},
+  {id:8,name:"Jawed Habib",area:"T.Nagar",rating:4.4,reviews:310,price:299,priceLabel:"₹299",services:["Haircut","Hair Colour","Spa"],img:"https://images.unsplash.com/photo-1633681122185-78be83c2ae5a?w=400&h=220&fit=crop&auto=format",tag:"Popular",open:true},
+  {id:9,name:"Bounce Salon",area:"Velachery",rating:4.5,reviews:145,price:550,priceLabel:"₹550",services:["Bridal","Makeup","Skin"],img:"https://images.unsplash.com/photo-1516975080664-ed2fc6a32937?w=400&h=220&fit=crop&auto=format",tag:"Trending",open:true},
+  {id:10,name:"Looks Salon",area:"Adyar",rating:4.3,reviews:180,price:380,priceLabel:"₹380",services:["Haircut","Facial","Nail Art"],img:"https://images.unsplash.com/photo-1519751138087-5bf79df62d5b?w=400&h=220&fit=crop&auto=format",tag:"Nearby",open:true},
+  {id:11,name:"Meenakshi Beauty",area:"Mylapore",rating:4.6,reviews:220,price:320,priceLabel:"₹320",services:["Bridal","Skin","Hair"],img:"https://images.unsplash.com/photo-1595476108010-b4d1f102b1b1?w=400&h=220&fit=crop&auto=format",tag:"Traditional",open:false},
+  {id:12,name:"Flaunt Salon",area:"OMR",rating:4.8,reviews:290,price:750,priceLabel:"₹750",services:["Hair","Colour","Spa","Nail"],img:"https://images.unsplash.com/photo-1600948836101-f9ffda59d250?w=400&h=220&fit=crop&auto=format",tag:"Editor's Pick",open:true},
+];
+
+let state={search:'',areas:[],services:[],rating:0,maxPrice:5000,openOnly:false,sort:'rating',view:'grid'};
+
+function renderSalons(data){
+  const grid=document.getElementById('salonsGrid');
+  document.getElementById('resultCount').textContent=data.length;
+  if(!data.length){grid.innerHTML=`<div class="empty-state"><div class="empty-icon">🔍</div><h3>No salons found</h3><p>Try adjusting your filters or search term</p></div>`;return;}
+  grid.innerHTML=data.map((s,i)=>`
+    <div class="salon-card" style="animation-delay:${i*0.05}s" onclick="openDetail(${s.id})">
+      <div class="card-img">
+        <img src="${s.img}" alt="${s.name}" loading="lazy" onerror="this.style.background='linear-gradient(135deg,#E8C4A8,#C9956C)';this.style.display='none'"/>
+        <div class="card-img-overlay"></div>
+        <div class="card-badge">${s.tag}</div>
+        <button class="card-fav" onclick="event.stopPropagation();this.textContent=this.textContent==='🤍'?'❤️':'🤍'">🤍</button>
+        <div class="card-open" style="background:${s.open?'rgba(46,158,91,0.85)':'rgba(180,50,50,0.75)'}">${s.open?'● Open Now':'● Closed'}</div>
+      </div>
+      <div class="card-body">
+        <div class="card-top"><div class="card-name">${s.name}</div><div class="card-rating">⭐ ${s.rating}</div></div>
+        <div class="card-meta"><span class="card-area">📍 ${s.area}</span><span class="card-reviews">💬 ${s.reviews} reviews</span></div>
+        <div class="card-services">${s.services.map(sv=>`<span class="stag">${sv}</span>`).join('')}</div>
+        <div class="card-foot"><div class="card-price">From <strong>${s.priceLabel}</strong></div><button class="book-btn" onclick="event.stopPropagation();window.location.href='stylesync-booking.html'">Book Now</button></div>
+      </div>
+    </div>`).join('');
+}
+
+function applyFilters(){
+  state.search=document.getElementById('searchInput').value.toLowerCase().trim();
+  state.sort=document.getElementById('sortSelect').value;
+  let result=SALONS.filter(s=>{
+    const ms=!state.search||s.name.toLowerCase().includes(state.search)||s.area.toLowerCase().includes(state.search)||s.services.some(sv=>sv.toLowerCase().includes(state.search));
+    const ma=!state.areas.length||state.areas.includes(s.area);
+    const msv=!state.services.length||state.services.some(f=>s.services.some(sv=>sv.toLowerCase().includes(f.toLowerCase())));
+    return ms&&ma&&msv&&s.rating>=state.rating&&s.price<=state.maxPrice&&(!state.openOnly||s.open);
+  });
+  result.sort((a,b)=>state.sort==='rating'?b.rating-a.rating:state.sort==='price-low'?a.price-b.price:state.sort==='price-high'?b.price-a.price:b.reviews-a.reviews);
+  renderSalons(result);renderActivePills();
+}
+
+function renderActivePills(){
+  const wrap=document.getElementById('activePills');
+  const pills=[];
+  state.areas.forEach(a=>pills.push({label:`📍 ${a}`,rm:()=>{state.areas=state.areas.filter(x=>x!==a);document.querySelectorAll(`[data-area="${a}"]`).forEach(el=>el.classList.remove('active'));applyFilters();}}));
+  state.services.forEach(s=>pills.push({label:`✦ ${s}`,rm:()=>{state.services=state.services.filter(x=>x!==s);document.querySelectorAll(`[data-svc="${s}"]`).forEach(el=>el.classList.remove('checked'));applyFilters();}}));
+  if(state.rating>0)pills.push({label:`⭐ ${state.rating}+`,rm:()=>{state.rating=0;document.querySelectorAll('.star-row').forEach(r=>r.classList.remove('active'));document.querySelector('[data-rating="0"]').classList.add('active');applyFilters();}});
+  if(state.maxPrice<5000)pills.push({label:`₹ Up to ${state.maxPrice}`,rm:()=>{state.maxPrice=5000;document.getElementById('priceRange').value=5000;document.getElementById('priceVal').textContent='Up to ₹5,000';applyFilters();}});
+  if(state.openOnly)pills.push({label:'● Open Now',rm:()=>{state.openOnly=false;document.getElementById('openNowCheck').classList.remove('checked');applyFilters();}});
+  wrap.innerHTML=pills.map((p,i)=>`<div class="af-pill">${p.label}<button onclick="removePill(${i})">✕</button></div>`).join('');
+  wrap._pills=pills;
+}
+function removePill(i){document.getElementById('activePills')._pills[i].rm();}
+function toggleChip(el){const v=el.dataset.area;el.classList.toggle('active');if(el.classList.contains('active'))state.areas.push(v);else state.areas=state.areas.filter(x=>x!==v);applyFilters();}
+function toggleCheck(el){el.classList.toggle('checked');const s=el.dataset.svc;if(el.classList.contains('checked'))state.services.push(s);else state.services=state.services.filter(x=>x!==s);applyFilters();}
+function setRating(el){document.querySelectorAll('.star-row').forEach(r=>r.classList.remove('active'));el.classList.add('active');state.rating=parseFloat(el.dataset.rating);applyFilters();}
+function updatePrice(i){state.maxPrice=parseInt(i.value);document.getElementById('priceVal').textContent=`Up to ₹${parseInt(i.value).toLocaleString()}`;applyFilters();}
+function toggleOpenNow(el){el.classList.toggle('checked');state.openOnly=el.classList.contains('checked');applyFilters();}
+function clearFilters(){state={search:'',areas:[],services:[],rating:0,maxPrice:5000,openOnly:false,sort:state.sort,view:state.view};document.getElementById('searchInput').value='';document.querySelectorAll('.chip').forEach(c=>c.classList.remove('active'));document.querySelectorAll('.check-item').forEach(c=>c.classList.remove('checked'));document.querySelectorAll('.star-row').forEach(r=>r.classList.remove('active'));document.querySelector('[data-rating="0"]').classList.add('active');document.getElementById('priceRange').value=5000;document.getElementById('priceVal').textContent='Up to ₹5,000';applyFilters();}
+function setView(v){state.view=v;document.getElementById('salonsGrid').className='salons-grid'+(v==='list'?' list-view':'');document.getElementById('gridBtn').classList.toggle('active',v==='grid');document.getElementById('listBtn').classList.toggle('active',v==='list');}
+function openSidebar(){document.getElementById('sidebar').classList.add('open');document.getElementById('overlay').classList.add('open');}
+function closeSidebar(){document.getElementById('sidebar').classList.remove('open');document.getElementById('overlay').classList.remove('open');}
+function openDetail(id){window.location.href='stylesync-detail.html';}
+applyFilters();
+</script>
+</body>
+</html>

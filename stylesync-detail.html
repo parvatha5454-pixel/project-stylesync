@@ -1,0 +1,655 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Glam Studio, T.Nagar — StyleSync</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,900;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --rose:#C9956C;--rose-lt:#E8C4A8;--rose-dk:#A87350;
+  --plum:#4A1942;--plum-lt:#6B2E61;--plum-dk:#2E0F29;
+  --cream:#FFF8F0;--cream-dk:#F5EDE0;--white:#FFFFFF;
+  --text:#1A0D18;--muted:#7A5C74;--border:rgba(74,25,66,0.12);
+  --green:#2E9E5B;
+  --shadow-sm:0 2px 12px rgba(74,25,66,0.08);
+  --shadow-md:0 8px 32px rgba(74,25,66,0.12);
+  --shadow-lg:0 24px 64px rgba(74,25,66,0.18);
+  --font-display:'Playfair Display',Georgia,serif;
+  --font-body:'DM Sans',sans-serif;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:var(--font-body);background:var(--cream);color:var(--text);overflow-x:hidden}
+a{text-decoration:none;color:inherit}
+button{cursor:pointer;border:none;font-family:inherit}
+img{display:block;max-width:100%}
+::-webkit-scrollbar{width:5px}
+::-webkit-scrollbar-track{background:var(--cream)}
+::-webkit-scrollbar-thumb{background:var(--rose-lt);border-radius:99px}
+
+/* NAV */
+.nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:0 5%;height:66px;background:rgba(255,248,240,0.92);backdrop-filter:blur(20px);border-bottom:1px solid var(--border)}
+.nav-logo{display:flex;align-items:center;gap:9px;font-family:var(--font-display);font-size:1.4rem;font-weight:700;color:var(--plum)}
+.nav-logo span{color:var(--rose)}
+.nav-logo-icon{width:34px;height:34px;background:linear-gradient(135deg,var(--rose),var(--plum));border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:1rem}
+.nav-links{display:flex;align-items:center;gap:28px;font-size:0.85rem;font-weight:500;color:var(--muted)}
+.nav-links a:hover{color:var(--plum)}
+.nav-cta{background:var(--plum);color:var(--white);padding:9px 20px;border-radius:99px;font-size:0.85rem;font-weight:500;transition:background 0.2s}
+.nav-cta:hover{background:var(--plum-lt)}
+
+/* HERO GALLERY */
+.gallery{margin-top:66px;display:grid;grid-template-columns:2fr 1fr 1fr;grid-template-rows:280px 280px;gap:6px;height:560px;overflow:hidden}
+.gallery-main{grid-row:1/3;grid-column:1/2;position:relative;overflow:hidden;cursor:pointer}
+.gallery-thumb{position:relative;overflow:hidden;cursor:pointer}
+.gallery-main img,.gallery-thumb img{width:100%;height:100%;object-fit:cover;transition:transform 0.4s}
+.gallery-main:hover img,.gallery-thumb:hover img{transform:scale(1.05)}
+.gallery-more{position:absolute;inset:0;background:rgba(46,15,41,0.55);display:flex;flex-direction:column;align-items:center;justify-content:center;color:var(--white)}
+.gallery-more span{font-size:1.6rem;font-weight:700;font-family:var(--font-display)}
+.gallery-more p{font-size:0.78rem;opacity:0.8;margin-top:4px}
+
+/* MAIN LAYOUT */
+.detail-layout{display:grid;grid-template-columns:1fr 360px;gap:40px;padding:40px 5% 80px;max-width:1300px;margin:0 auto}
+
+/* LEFT CONTENT */
+.detail-left{}
+
+/* SALON HEADER */
+.salon-header{margin-bottom:28px}
+.breadcrumb{display:flex;align-items:center;gap:6px;font-size:0.75rem;color:var(--muted);margin-bottom:14px}
+.breadcrumb a{color:var(--muted);transition:color 0.2s}
+.breadcrumb a:hover{color:var(--rose)}
+.breadcrumb-sep{color:var(--border)}
+.salon-name{font-family:var(--font-display);font-size:clamp(1.8rem,3vw,2.6rem);font-weight:800;color:var(--plum);line-height:1.15;margin-bottom:10px}
+.salon-meta{display:flex;flex-wrap:wrap;align-items:center;gap:14px;margin-bottom:16px}
+.rating-badge{display:flex;align-items:center;gap:5px;background:rgba(245,200,66,0.12);border:1px solid rgba(245,200,66,0.3);padding:5px 12px;border-radius:99px;font-size:0.85rem;font-weight:700;color:#9A7A00}
+.meta-pill{display:flex;align-items:center;gap:5px;font-size:0.82rem;color:var(--muted)}
+.open-badge{background:rgba(46,158,91,0.1);border:1px solid rgba(46,158,91,0.25);color:var(--green);font-size:0.78rem;font-weight:600;padding:4px 12px;border-radius:99px}
+.salon-tags-row{display:flex;flex-wrap:wrap;gap:7px;margin-top:10px}
+.stag{background:rgba(74,25,66,0.07);color:var(--plum);font-size:0.72rem;font-weight:500;padding:4px 12px;border-radius:99px}
+.stag-highlight{background:rgba(201,149,108,0.15);color:var(--rose-dk);border:1px solid rgba(201,149,108,0.3)}
+
+/* ACTION ROW */
+.action-row{display:flex;gap:10px;margin-bottom:32px;flex-wrap:wrap}
+.action-btn{display:flex;align-items:center;gap:6px;padding:9px 18px;border-radius:99px;font-size:0.8rem;font-weight:600;transition:all 0.2s;border:1.5px solid var(--border);background:var(--white);color:var(--muted)}
+.action-btn:hover{border-color:var(--plum);color:var(--plum);background:var(--cream)}
+.action-btn.fav.liked{border-color:#E87090;color:#E87090;background:rgba(232,112,144,0.06)}
+
+/* SECTION CARDS */
+.detail-card{background:var(--white);border-radius:20px;border:1px solid var(--border);padding:28px;margin-bottom:24px;box-shadow:var(--shadow-sm)}
+.detail-card-title{font-family:var(--font-display);font-size:1.15rem;font-weight:700;color:var(--plum);margin-bottom:20px;display:flex;align-items:center;gap:8px}
+
+/* ABOUT */
+.about-text{font-size:0.9rem;color:var(--muted);line-height:1.8}
+.about-highlights{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:20px}
+.about-hl{background:var(--cream);border-radius:12px;padding:14px;text-align:center}
+.about-hl-icon{font-size:1.4rem;margin-bottom:6px}
+.about-hl-val{font-weight:700;font-size:0.95rem;color:var(--plum)}
+.about-hl-label{font-size:0.7rem;color:var(--muted);margin-top:2px}
+
+/* SERVICES */
+.services-tabs{display:flex;gap:8px;margin-bottom:20px;flex-wrap:wrap}
+.svc-tab{padding:6px 16px;border-radius:99px;font-size:0.78rem;font-weight:600;border:1.5px solid var(--border);color:var(--muted);background:var(--cream);cursor:pointer;transition:all 0.18s}
+.svc-tab.active{background:var(--plum);color:var(--white);border-color:var(--plum)}
+.services-list{display:flex;flex-direction:column;gap:0}
+.svc-item{display:flex;align-items:center;justify-content:space-between;padding:14px 0;border-bottom:1px solid var(--border)}
+.svc-item:last-child{border-bottom:none}
+.svc-left{display:flex;align-items:flex-start;gap:12px}
+.svc-icon-box{width:38px;height:38px;border-radius:10px;background:var(--cream-dk);display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0}
+.svc-name{font-weight:600;font-size:0.88rem;color:var(--plum)}
+.svc-dur{font-size:0.72rem;color:var(--muted);margin-top:2px}
+.svc-right{display:flex;align-items:center;gap:12px}
+.svc-price{font-weight:700;font-size:0.95rem;color:var(--rose-dk)}
+.svc-add{background:var(--plum);color:var(--white);width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1rem;transition:all 0.2s;flex-shrink:0}
+.svc-add:hover{background:var(--plum-lt);transform:scale(1.1)}
+.svc-add.added{background:var(--green)}
+
+/* PHOTOS STRIP */
+.photos-strip{display:flex;gap:10px;overflow-x:auto;padding-bottom:8px;scrollbar-width:thin}
+.photos-strip::-webkit-scrollbar{height:4px}
+.photos-strip::-webkit-scrollbar-thumb{background:var(--rose-lt);border-radius:99px}
+.photo-thumb{width:120px;height:90px;border-radius:12px;object-fit:cover;flex-shrink:0;cursor:pointer;transition:transform 0.2s;border:2px solid transparent}
+.photo-thumb:hover{transform:scale(1.04);border-color:var(--rose)}
+
+/* AVAILABILITY */
+.avail-dates{display:flex;gap:8px;overflow-x:auto;padding-bottom:8px;margin-bottom:20px}
+.avail-dates::-webkit-scrollbar{height:4px}
+.date-pill{flex-shrink:0;padding:10px 16px;border-radius:12px;border:1.5px solid var(--border);text-align:center;cursor:pointer;transition:all 0.18s;background:var(--cream)}
+.date-pill:hover,.date-pill.active{background:var(--plum);border-color:var(--plum)}
+.date-pill.active .dp-day,.date-pill.active .dp-date{color:var(--white)}
+.dp-day{font-size:0.68rem;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:0.08em}
+.dp-date{font-size:1rem;font-weight:700;color:var(--plum);margin-top:2px}
+.time-slots{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.time-slot{padding:9px 6px;border-radius:10px;border:1.5px solid var(--border);text-align:center;font-size:0.78rem;font-weight:600;color:var(--plum);cursor:pointer;background:var(--cream);transition:all 0.18s}
+.time-slot:hover,.time-slot.active{background:var(--plum);color:var(--white);border-color:var(--plum)}
+.time-slot.unavail{opacity:0.35;cursor:not-allowed;background:var(--cream-dk)}
+
+/* REVIEWS */
+.reviews-summary{display:flex;gap:24px;align-items:center;padding:20px;background:var(--cream);border-radius:14px;margin-bottom:20px}
+.big-rating{font-family:var(--font-display);font-size:3.5rem;font-weight:800;color:var(--plum);line-height:1}
+.rating-stars{color:#F5C842;font-size:1.1rem;margin:4px 0}
+.rating-count{font-size:0.78rem;color:var(--muted)}
+.rating-bars{flex:1}
+.rbar-row{display:flex;align-items:center;gap:8px;margin-bottom:6px}
+.rbar-label{font-size:0.72rem;color:var(--muted);width:12px;text-align:right;flex-shrink:0}
+.rbar-track{flex:1;height:6px;background:var(--cream-dk);border-radius:99px;overflow:hidden}
+.rbar-fill{height:100%;background:linear-gradient(90deg,var(--rose),var(--plum));border-radius:99px}
+.rbar-count{font-size:0.7rem;color:var(--muted);width:24px;text-align:right;flex-shrink:0}
+.review-list{display:flex;flex-direction:column;gap:16px}
+.review-item{padding-bottom:16px;border-bottom:1px solid var(--border)}
+.review-item:last-child{border-bottom:none;padding-bottom:0}
+.rev-header{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+.rev-avatar{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--rose-lt),var(--rose));display:flex;align-items:center;justify-content:center;font-weight:700;color:var(--white);font-size:0.9rem;flex-shrink:0}
+.rev-name{font-weight:600;font-size:0.85rem;color:var(--plum)}
+.rev-date{font-size:0.72rem;color:var(--muted)}
+.rev-stars{color:#F5C842;font-size:0.75rem;margin-left:auto}
+.rev-text{font-size:0.85rem;color:var(--muted);line-height:1.7}
+.rev-service{display:inline-block;background:rgba(74,25,66,0.07);color:var(--plum);font-size:0.68rem;font-weight:600;padding:2px 8px;border-radius:99px;margin-top:6px}
+
+/* MAP */
+.map-placeholder{height:180px;background:linear-gradient(135deg,var(--plum-dk),var(--plum));border-radius:14px;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:8px;cursor:pointer;transition:opacity 0.2s}
+.map-placeholder:hover{opacity:0.9}
+.map-placeholder span{font-size:2rem}
+.map-placeholder p{color:rgba(255,248,240,0.8);font-size:0.82rem}
+.map-address{font-size:0.82rem;color:var(--muted);margin-top:12px;display:flex;gap:6px;align-items:flex-start}
+
+/* RIGHT STICKY BOOKING CARD */
+.booking-card{position:sticky;top:86px;background:var(--white);border-radius:24px;border:1px solid var(--border);box-shadow:var(--shadow-lg);overflow:hidden}
+.booking-card-header{background:linear-gradient(135deg,var(--plum),var(--plum-lt));padding:24px;position:relative;overflow:hidden}
+.booking-card-header::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 80% 0%,rgba(201,149,108,0.25) 0%,transparent 60%);pointer-events:none}
+.bc-label{font-size:0.7rem;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:rgba(255,248,240,0.55);margin-bottom:6px}
+.bc-price{font-family:var(--font-display);font-size:2rem;font-weight:800;color:var(--white)}
+.bc-price span{font-size:0.85rem;font-weight:400;opacity:0.6;margin-left:4px}
+.bc-rating-row{display:flex;align-items:center;gap:6px;margin-top:10px}
+.bc-stars{color:#F5C842;font-size:0.85rem}
+.bc-rating-text{font-size:0.78rem;color:rgba(255,248,240,0.65)}
+.booking-card-body{padding:20px}
+.bc-section-title{font-size:0.72rem;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);margin-bottom:10px}
+
+/* selected services in booking card */
+.bc-selected{margin-bottom:16px;min-height:40px}
+.bc-svc-item{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--border);font-size:0.82rem}
+.bc-svc-item:last-child{border-bottom:none}
+.bc-svc-name{color:var(--plum);font-weight:500}
+.bc-svc-price{color:var(--rose-dk);font-weight:700}
+.bc-svc-remove{color:var(--muted);font-size:0.8rem;cursor:pointer;background:none;border:none;padding:0 4px;transition:color 0.15s}
+.bc-svc-remove:hover{color:#E87090}
+.bc-empty{font-size:0.8rem;color:var(--muted);text-align:center;padding:12px 0;font-style:italic}
+
+/* date mini in booking card */
+.bc-date-row{display:flex;gap:6px;margin-bottom:12px;overflow-x:auto}
+.bc-date-mini{flex-shrink:0;padding:7px 12px;border-radius:10px;border:1.5px solid var(--border);cursor:pointer;background:var(--cream);transition:all 0.15s;text-align:center}
+.bc-date-mini.active{background:var(--plum);border-color:var(--plum)}
+.bc-date-mini.active .bdm-day,.bc-date-mini.active .bdm-d{color:var(--white)}
+.bdm-day{font-size:0.62rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.07em}
+.bdm-d{font-size:0.88rem;font-weight:700;color:var(--plum)}
+.bc-time-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:16px}
+.bc-time{padding:7px 4px;border-radius:8px;border:1.5px solid var(--border);text-align:center;font-size:0.72rem;font-weight:600;color:var(--plum);cursor:pointer;background:var(--cream);transition:all 0.15s}
+.bc-time:hover,.bc-time.active{background:var(--plum);color:var(--white);border-color:var(--plum)}
+.bc-time.na{opacity:0.3;cursor:not-allowed}
+
+/* total row */
+.bc-total{display:flex;justify-content:space-between;align-items:center;padding:14px 0;border-top:1px solid var(--border);margin-bottom:14px}
+.bc-total-label{font-size:0.85rem;font-weight:600;color:var(--plum)}
+.bc-total-val{font-family:var(--font-display);font-size:1.2rem;font-weight:800;color:var(--rose-dk)}
+
+.book-now-btn{width:100%;background:linear-gradient(135deg,var(--plum),var(--plum-lt));color:var(--white);padding:15px;border-radius:99px;font-size:0.95rem;font-weight:700;transition:all 0.2s;box-shadow:0 4px 20px rgba(74,25,66,0.3)}
+.book-now-btn:hover{transform:translateY(-2px);box-shadow:0 8px 28px rgba(74,25,66,0.4)}
+.book-now-btn:disabled{opacity:0.5;cursor:not-allowed;transform:none}
+.bc-note{text-align:center;font-size:0.72rem;color:var(--muted);margin-top:10px;display:flex;align-items:center;justify-content:center;gap:4px}
+
+/* SIMILAR SALONS */
+.similar-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.sim-card{background:var(--white);border-radius:14px;overflow:hidden;border:1px solid var(--border);cursor:pointer;transition:all 0.2s}
+.sim-card:hover{transform:translateY(-3px);box-shadow:var(--shadow-md)}
+.sim-img{height:90px;display:flex;align-items:center;justify-content:center;font-size:2.5rem}
+.sim-body{padding:10px}
+.sim-name{font-weight:600;font-size:0.8rem;color:var(--plum);margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sim-area{font-size:0.7rem;color:var(--muted)}
+.sim-rating{font-size:0.72rem;font-weight:600;color:#9A7A00;margin-top:4px}
+
+/* MOBILE BOTTOM BAR */
+.mobile-book-bar{display:none;position:fixed;bottom:0;left:0;right:0;z-index:80;background:var(--white);border-top:1px solid var(--border);padding:12px 5%;box-shadow:0 -4px 20px rgba(74,25,66,0.1);align-items:center;justify-content:space-between;gap:12px}
+.mb-price{font-family:var(--font-display);font-size:1.3rem;font-weight:800;color:var(--plum)}
+.mb-price span{font-size:0.78rem;font-weight:400;color:var(--muted)}
+.mb-book{background:linear-gradient(135deg,var(--plum),var(--plum-lt));color:var(--white);padding:12px 28px;border-radius:99px;font-size:0.88rem;font-weight:700;flex-shrink:0}
+
+/* ANIMATIONS */
+@keyframes fadeUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
+.fade-up{animation:fadeUp 0.5s ease both}
+
+/* RESPONSIVE */
+@media(max-width:960px){
+  .gallery{grid-template-columns:1fr 1fr;grid-template-rows:220px 220px;height:440px}
+  .gallery-main{grid-row:1/2;grid-column:1/3}
+  .detail-layout{grid-template-columns:1fr;gap:24px;padding:24px 5% 100px}
+  .booking-card{display:none}
+  .mobile-book-bar{display:flex}
+  .similar-grid{grid-template-columns:repeat(3,1fr)}
+  .about-highlights{grid-template-columns:repeat(3,1fr)}
+  .time-slots{grid-template-columns:repeat(3,1fr)}
+}
+@media(max-width:600px){
+  .nav-links{display:none}
+  .gallery{grid-template-columns:1fr;grid-template-rows:220px;height:220px}
+  .gallery-thumb{display:none}
+  .about-highlights{grid-template-columns:repeat(3,1fr)}
+  .similar-grid{grid-template-columns:repeat(2,1fr)}
+  .time-slots{grid-template-columns:repeat(3,1fr)}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav">
+  <a href="stylesync-home.html" class="nav-logo">
+    <div class="nav-logo-icon">✦</div>
+    Style<span>Sync</span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="stylesync-home.html">Home</a></li>
+    <li><a href="stylesync-listing.html">Salons</a></li>
+    <li><a href="stylesync-quiz.html">AI Stylist</a></li>
+    <a href="#book" class="nav-cta">Book Now</a>
+  </ul>
+</nav>
+
+<!-- GALLERY -->
+<div class="gallery">
+  <div class="gallery-main">
+    <img src="https://images.unsplash.com/photo-1633681926022-84c23e8cb2d6?w=900&q=80" alt="Glam Studio Main"/>
+  </div>
+  <div class="gallery-thumb">
+    <img src="https://images.unsplash.com/photo-1560066984-138dadb4c035?w=500&q=80" alt="Salon Interior"/>
+  </div>
+  <div class="gallery-thumb">
+    <img src="https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?w=500&q=80" alt="Facial Service"/>
+  </div>
+  <div class="gallery-thumb">
+    <img src="https://images.unsplash.com/photo-1519741497674-611481863552?w=500&q=80" alt="Bridal Makeup"/>
+  </div>
+  <div class="gallery-thumb" style="position:relative">
+    <img src="https://images.unsplash.com/photo-1604654894610-df63bc536371?w=500&q=80" alt="Nail Art"/>
+    <div class="gallery-more">
+      <span>+8</span>
+      <p>View all photos</p>
+    </div>
+  </div>
+</div>
+
+<!-- MAIN LAYOUT -->
+<div class="detail-layout">
+
+  <!-- LEFT -->
+  <div class="detail-left">
+
+    <!-- SALON HEADER -->
+    <div class="salon-header fade-up">
+      <div class="breadcrumb">
+        <a href="stylesync-home.html">Home</a>
+        <span class="breadcrumb-sep">›</span>
+        <a href="stylesync-listing.html">Salons</a>
+        <span class="breadcrumb-sep">›</span>
+        <span style="color:var(--plum);font-weight:500">Glam Studio</span>
+      </div>
+      <h1 class="salon-name">Glam Studio</h1>
+      <div class="salon-meta">
+        <div class="rating-badge">⭐ 4.8 <span style="font-weight:400;color:var(--muted);font-size:0.75rem">(320 reviews)</span></div>
+        <div class="meta-pill">📍 T.Nagar, Chennai</div>
+        <div class="meta-pill">🕐 10:00 AM – 8:30 PM</div>
+        <div class="open-badge">● Open Now</div>
+      </div>
+      <div class="salon-tags-row">
+        <span class="stag stag-highlight">Bridal Specialist</span>
+        <span class="stag">Haircut & Style</span>
+        <span class="stag">Facial & Skin</span>
+        <span class="stag">Nail Art</span>
+        <span class="stag">Hair Spa</span>
+        <span class="stag">Makeup</span>
+      </div>
+    </div>
+
+    <!-- ACTION ROW -->
+    <div class="action-row fade-up">
+      <button class="action-btn fav" onclick="toggleFav(this)">🤍 Save</button>
+      <button class="action-btn" onclick="shareAlert()">↗ Share</button>
+      <button class="action-btn" onclick="callAlert()">📞 Call</button>
+      <button class="action-btn" onclick="dirAlert()">🗺 Directions</button>
+    </div>
+
+    <!-- ABOUT -->
+    <div class="detail-card fade-up">
+      <div class="detail-card-title">✦ About Glam Studio</div>
+      <p class="about-text">Glam Studio is Chennai's most-loved premium beauty salon, nestled in the heart of T.Nagar. With over 8 years of excellence, we specialise in bridal transformations, hair treatments, and luxury skincare. Our team of 12 certified stylists use international-grade products to deliver results you'll love. Walk-ins welcome, appointments preferred.</p>
+      <div class="about-highlights">
+        <div class="about-hl">
+          <div class="about-hl-icon">💇‍♀️</div>
+          <div class="about-hl-val">12</div>
+          <div class="about-hl-label">Expert Stylists</div>
+        </div>
+        <div class="about-hl">
+          <div class="about-hl-icon">⭐</div>
+          <div class="about-hl-val">4.8</div>
+          <div class="about-hl-label">Avg Rating</div>
+        </div>
+        <div class="about-hl">
+          <div class="about-hl-icon">🎉</div>
+          <div class="about-hl-val">8 yrs</div>
+          <div class="about-hl-label">Experience</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SERVICES -->
+    <div class="detail-card fade-up" id="services-card">
+      <div class="detail-card-title">💅 Services & Pricing</div>
+      <div class="services-tabs" id="svcTabs">
+        <div class="svc-tab active" onclick="setTab(this,'all')">All</div>
+        <div class="svc-tab" onclick="setTab(this,'hair')">Hair</div>
+        <div class="svc-tab" onclick="setTab(this,'skin')">Skin & Face</div>
+        <div class="svc-tab" onclick="setTab(this,'bridal')">Bridal</div>
+        <div class="svc-tab" onclick="setTab(this,'nail')">Nails</div>
+      </div>
+      <div class="services-list" id="servicesList"></div>
+    </div>
+
+    <!-- AVAILABILITY -->
+    <div class="detail-card fade-up" id="availability-card">
+      <div class="detail-card-title">🗓 Availability</div>
+      <div class="avail-dates" id="availDates"></div>
+      <div class="bc-section-title" style="margin-bottom:10px">Select Time</div>
+      <div class="time-slots" id="timeSlots"></div>
+    </div>
+
+    <!-- PHOTOS -->
+    <div class="detail-card fade-up">
+      <div class="detail-card-title">📸 Photos</div>
+      <div class="photos-strip">
+        <img class="photo-thumb" src="https://images.unsplash.com/photo-1633681926022-84c23e8cb2d6?w=300&q=80" alt="p1"/>
+        <img class="photo-thumb" src="https://images.unsplash.com/photo-1560066984-138dadb4c035?w=300&q=80" alt="p2"/>
+        <img class="photo-thumb" src="https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?w=300&q=80" alt="p3"/>
+        <img class="photo-thumb" src="https://images.unsplash.com/photo-1519741497674-611481863552?w=300&q=80" alt="p4"/>
+        <img class="photo-thumb" src="https://images.unsplash.com/photo-1604654894610-df63bc536371?w=300&q=80" alt="p5"/>
+        <img class="photo-thumb" src="https://images.unsplash.com/photo-1522338242992-e1a54906a8da?w=300&q=80" alt="p6"/>
+      </div>
+    </div>
+
+    <!-- REVIEWS -->
+    <div class="detail-card fade-up">
+      <div class="detail-card-title">💬 Customer Reviews</div>
+      <div class="reviews-summary">
+        <div style="text-align:center">
+          <div class="big-rating">4.8</div>
+          <div class="rating-stars">★★★★★</div>
+          <div class="rating-count">320 reviews</div>
+        </div>
+        <div class="rating-bars">
+          <div class="rbar-row"><div class="rbar-label">5</div><div class="rbar-track"><div class="rbar-fill" style="width:82%"></div></div><div class="rbar-count">262</div></div>
+          <div class="rbar-row"><div class="rbar-label">4</div><div class="rbar-track"><div class="rbar-fill" style="width:12%"></div></div><div class="rbar-count">38</div></div>
+          <div class="rbar-row"><div class="rbar-label">3</div><div class="rbar-track"><div class="rbar-fill" style="width:4%"></div></div><div class="rbar-count">13</div></div>
+          <div class="rbar-row"><div class="rbar-label">2</div><div class="rbar-track"><div class="rbar-fill" style="width:1%"></div></div><div class="rbar-count">4</div></div>
+          <div class="rbar-row"><div class="rbar-label">1</div><div class="rbar-track"><div class="rbar-fill" style="width:1%"></div></div><div class="rbar-count">3</div></div>
+        </div>
+      </div>
+      <div class="review-list">
+        <div class="review-item">
+          <div class="rev-header"><div class="rev-avatar">P</div><div><div class="rev-name">Priya Rajan</div><div class="rev-date">2 weeks ago</div></div><div class="rev-stars">★★★★★</div></div>
+          <div class="rev-text">Absolutely stunning bridal makeup! The team understood exactly what I wanted and delivered beyond expectations. My wedding day look was magical. Every guest complimented me!</div>
+          <div class="rev-service">Bridal Full Package</div>
+        </div>
+        <div class="review-item">
+          <div class="rev-header"><div class="rev-avatar">A</div><div><div class="rev-name">Ananya Krishnan</div><div class="rev-date">1 month ago</div></div><div class="rev-stars">★★★★★</div></div>
+          <div class="rev-text">Got a keratin treatment and highlights done. The stylist was so professional and the results are gorgeous. My hair has never looked this healthy. Totally worth every rupee!</div>
+          <div class="rev-service">Keratin Treatment + Highlights</div>
+        </div>
+        <div class="review-item">
+          <div class="rev-header"><div class="rev-avatar">D</div><div><div class="rev-name">Deepa Suresh</div><div class="rev-date">3 weeks ago</div></div><div class="rev-stars">★★★★☆</div></div>
+          <div class="rev-text">Great facial experience — skin feels so fresh and glowing. The ambiance is premium and relaxing. Wait time was a bit long on weekends but totally worth it.</div>
+          <div class="rev-service">Gold Facial</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- LOCATION -->
+    <div class="detail-card fade-up">
+      <div class="detail-card-title">📍 Location</div>
+      <div class="map-placeholder" onclick="alert('Maps integration — coming soon!')">
+        <span>🗺️</span>
+        <p>View on Google Maps</p>
+      </div>
+      <div class="map-address">📍 <span>No. 42, Usman Road, T.Nagar, Chennai – 600017. Near Saravana Stores.</span></div>
+    </div>
+
+    <!-- SIMILAR SALONS -->
+    <div class="detail-card fade-up">
+      <div class="detail-card-title">✦ Similar Salons Nearby</div>
+      <div class="similar-grid">
+        <div class="sim-card" onclick="alert('Naturals Salon detail — coming soon!')">
+          <div class="sim-img" style="background:linear-gradient(135deg,#B8E6C9,#4A9E6B)">🌿</div>
+          <div class="sim-body"><div class="sim-name">Naturals Salon</div><div class="sim-area">Anna Nagar</div><div class="sim-rating">⭐ 4.6</div></div>
+        </div>
+        <div class="sim-card" onclick="alert('Lakmé Salon detail — coming soon!')">
+          <div class="sim-img" style="background:linear-gradient(135deg,#E8C4A8,#C9956C)">✨</div>
+          <div class="sim-body"><div class="sim-name">Lakmé Salon</div><div class="sim-area">Velachery</div><div class="sim-rating">⭐ 4.7</div></div>
+        </div>
+        <div class="sim-card" onclick="alert('Enrich Salon detail — coming soon!')">
+          <div class="sim-img" style="background:linear-gradient(135deg,#F9CDD8,#E87090)">💅</div>
+          <div class="sim-body"><div class="sim-name">Enrich Salon</div><div class="sim-area">Adyar</div><div class="sim-rating">⭐ 4.6</div></div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- end left -->
+
+  <!-- RIGHT BOOKING CARD -->
+  <div class="detail-right" id="book">
+    <div class="booking-card">
+      <div class="booking-card-header">
+        <div class="bc-label">Starting from</div>
+        <div class="bc-price">₹499 <span>/ service</span></div>
+        <div class="bc-rating-row">
+          <span class="bc-stars">★★★★★</span>
+          <span class="bc-rating-text">4.8 · 320 reviews · T.Nagar</span>
+        </div>
+      </div>
+      <div class="booking-card-body">
+        <div class="bc-section-title">Selected Services</div>
+        <div class="bc-selected" id="bcSelected">
+          <div class="bc-empty" id="bcEmpty">No services selected yet</div>
+        </div>
+
+        <div class="bc-section-title">Select Date</div>
+        <div class="bc-date-row" id="bcDates"></div>
+
+        <div class="bc-section-title">Select Time</div>
+        <div class="bc-time-grid" id="bcTimes"></div>
+
+        <div class="bc-total">
+          <span class="bc-total-label">Total</span>
+          <span class="bc-total-val" id="bcTotal">₹0</span>
+        </div>
+        <button class="book-now-btn" id="bookBtn" onclick="confirmBooking()">Book Appointment</button>
+        <div class="bc-note">🔒 Free cancellation up to 2 hours before</div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- end layout -->
+
+<!-- MOBILE BOTTOM BAR -->
+<div class="mobile-book-bar">
+  <div><div class="mb-price">₹499 <span>onwards</span></div><div style="font-size:0.72rem;color:var(--muted)">⭐ 4.8 · T.Nagar</div></div>
+  <button class="mb-book" onclick="document.getElementById('availability-card').scrollIntoView({behavior:'smooth'})">Book Now</button>
+</div>
+
+<script>
+/* ─── SERVICES DATA ─── */
+const SERVICES = [
+  {id:1, cat:'hair',   icon:'✂️', name:'Haircut & Blow Dry',      dur:'45 min', price:499},
+  {id:2, cat:'hair',   icon:'🎨', name:'Hair Colour (Global)',     dur:'2 hrs',  price:1200},
+  {id:3, cat:'hair',   icon:'✨', name:'Keratin Treatment',        dur:'3 hrs',  price:2500},
+  {id:4, cat:'hair',   icon:'🌿', name:'Hair Spa & Deep Conditioning',dur:'1 hr',price:799},
+  {id:5, cat:'hair',   icon:'💫', name:'Highlights (Balayage)',    dur:'2.5 hrs',price:1800},
+  {id:6, cat:'skin',   icon:'🧖', name:'Gold Facial',              dur:'60 min', price:999},
+  {id:7, cat:'skin',   icon:'💆', name:'Cleanup & Detan',          dur:'45 min', price:499},
+  {id:8, cat:'skin',   icon:'🌸', name:'Whitening Facial',         dur:'75 min', price:1299},
+  {id:9, cat:'bridal', icon:'👰', name:'Full Bridal Package',      dur:'Full day',price:12000},
+  {id:10,cat:'bridal', icon:'💄', name:'Bridal Makeup (Party)',    dur:'3 hrs',  price:3500},
+  {id:11,cat:'bridal', icon:'🌺', name:'Pre-Bridal Package',       dur:'Half day',price:5999},
+  {id:12,cat:'nail',   icon:'💅', name:'Gel Nail Extensions',      dur:'1.5 hrs',price:899},
+  {id:13,cat:'nail',   icon:'🎨', name:'Nail Art (per hand)',      dur:'45 min', price:599},
+  {id:14,cat:'nail',   icon:'✨', name:'Manicure + Pedicure',      dur:'1 hr',   price:699},
+];
+
+let selectedServices = [];
+let selectedDate = null;
+let selectedTime = null;
+let currentTab = 'all';
+
+/* ─── RENDER SERVICES ─── */
+function renderServices() {
+  const list = document.getElementById('servicesList');
+  const filtered = currentTab === 'all' ? SERVICES : SERVICES.filter(s => s.cat === currentTab);
+  list.innerHTML = filtered.map(s => {
+    const isAdded = selectedServices.find(x => x.id === s.id);
+    return `
+      <div class="svc-item">
+        <div class="svc-left">
+          <div class="svc-icon-box">${s.icon}</div>
+          <div>
+            <div class="svc-name">${s.name}</div>
+            <div class="svc-dur">⏱ ${s.dur}</div>
+          </div>
+        </div>
+        <div class="svc-right">
+          <div class="svc-price">₹${s.price.toLocaleString()}</div>
+          <button class="svc-add ${isAdded ? 'added' : ''}" onclick="toggleService(${s.id})" title="${isAdded ? 'Remove' : 'Add'}">
+            ${isAdded ? '✓' : '+'}
+          </button>
+        </div>
+      </div>`;
+  }).join('');
+}
+
+function setTab(el, cat) {
+  document.querySelectorAll('.svc-tab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  currentTab = cat;
+  renderServices();
+}
+
+function toggleService(id) {
+  const svc = SERVICES.find(s => s.id === id);
+  const idx = selectedServices.findIndex(s => s.id === id);
+  if (idx > -1) selectedServices.splice(idx, 1);
+  else selectedServices.push(svc);
+  renderServices();
+  updateBookingCard();
+}
+
+/* ─── DATES ─── */
+function renderDates(containerId, activeClass) {
+  const days = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+  const today = new Date();
+  let html = '';
+  for (let i = 0; i < 7; i++) {
+    const d = new Date(today); d.setDate(today.getDate() + i);
+    const label = i === 0 ? 'Today' : i === 1 ? 'Tmrw' : days[d.getDay()];
+    const dateStr = d.toDateString();
+    const isActive = selectedDate === dateStr;
+    if (containerId === 'availDates') {
+      html += `<div class="date-pill ${isActive ? 'active' : ''}" onclick="setDate('${dateStr}','${containerId}')">
+        <div class="dp-day">${label}</div><div class="dp-date">${d.getDate()}</div></div>`;
+    } else {
+      html += `<div class="bc-date-mini ${isActive ? 'active' : ''}" onclick="setDate('${dateStr}','${containerId}')">
+        <div class="bdm-day">${label}</div><div class="bdm-d">${d.getDate()}</div></div>`;
+    }
+  }
+  document.getElementById(containerId).innerHTML = html;
+}
+
+function setDate(dateStr, containerId) {
+  selectedDate = dateStr;
+  renderDates('availDates', 'active');
+  renderDates('bcDates', 'active');
+  renderTimeSlots();
+}
+
+/* ─── TIME SLOTS ─── */
+const ALL_TIMES = ['10:00','10:30','11:00','11:30','12:00','12:30','2:00','2:30','3:00','3:30','4:00','4:30','5:00','5:30','6:00','6:30','7:00','7:30'];
+const UNAVAIL   = ['11:00','12:30','3:30','5:30'];
+
+function renderTimeSlots() {
+  ['timeSlots','bcTimes'].forEach(id => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.innerHTML = ALL_TIMES.map(t => {
+      const na = UNAVAIL.includes(t);
+      const active = selectedTime === t;
+      return `<div class="time-slot ${na ? 'unavail' : ''} ${active && !na ? 'active' : ''}" 
+        onclick="${na ? '' : `setTime('${t}')`}">${t}</div>`;
+    }).join('');
+  });
+}
+
+function setTime(t) {
+  selectedTime = t;
+  renderTimeSlots();
+  updateBookingCard();
+}
+
+/* ─── BOOKING CARD UPDATE ─── */
+function updateBookingCard() {
+  const container = document.getElementById('bcSelected');
+  const empty = document.getElementById('bcEmpty');
+  const total = selectedServices.reduce((sum, s) => sum + s.price, 0);
+  document.getElementById('bcTotal').textContent = '₹' + total.toLocaleString();
+
+  if (selectedServices.length === 0) {
+    container.innerHTML = '<div class="bc-empty" id="bcEmpty">No services selected yet</div>';
+  } else {
+    container.innerHTML = selectedServices.map(s => `
+      <div class="bc-svc-item">
+        <span class="bc-svc-name">${s.name}</span>
+        <div style="display:flex;align-items:center;gap:6px">
+          <span class="bc-svc-price">₹${s.price.toLocaleString()}</span>
+          <button class="bc-svc-remove" onclick="toggleService(${s.id})">✕</button>
+        </div>
+      </div>`).join('');
+  }
+}
+
+/* ─── CONFIRM BOOKING ─── */
+function confirmBooking() {
+  if (selectedServices.length === 0) { alert('Please select at least one service! 💅'); return; }
+  if (!selectedDate) { alert('Please select a date! 📅'); return; }
+  if (!selectedTime) { alert('Please select a time! 🕐'); return; }
+  const names = selectedServices.map(s => s.name).join(', ');
+  const total = selectedServices.reduce((sum, s) => sum + s.price, 0);
+  alert(`✅ Booking Confirmed!\n\nSalon: Glam Studio, T.Nagar\nServices: ${names}\nDate: ${selectedDate}\nTime: ${selectedTime}\nTotal: ₹${total.toLocaleString()}\n\nBooking Flow page la full confirmation varum! 🌸`);
+}
+
+/* ─── FAV / SHARE ─── */
+function toggleFav(btn) {
+  btn.classList.toggle('liked');
+  btn.textContent = btn.classList.contains('liked') ? '❤️ Saved' : '🤍 Save';
+}
+function shareAlert() { alert('Share feature — coming soon! 📤'); }
+function callAlert()  { alert('Calling Glam Studio: +91 98400 12345 📞'); }
+function dirAlert()   { alert('Opening directions to T.Nagar! 🗺'); }
+
+/* ─── INIT ─── */
+renderServices();
+renderDates('availDates');
+renderDates('bcDates');
+renderTimeSlots();
+// auto select today
+selectedDate = new Date().toDateString();
+renderDates('availDates');
+renderDates('bcDates');
+</script>
+</body>
+</html>

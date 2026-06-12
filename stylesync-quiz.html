@@ -1,0 +1,681 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>StyleSync — AI Style Quiz</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --rose-gold: #C9956A;
+      --rose-gold-light: #E8C5A8;
+      --deep-plum: #4A1942;
+      --plum-mid: #7B3F72;
+      --cream: #FAF6F1;
+      --cream-dark: #F0E8DF;
+      --charcoal: #2B2028;
+      --muted: #9A8590;
+      --white: #FFFFFF;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--cream);
+      color: var(--charcoal);
+      min-height: 100vh;
+    }
+
+    /* NAV */
+    nav {
+      background: var(--deep-plum);
+      padding: 18px 40px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .logo {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.7rem;
+      font-weight: 600;
+      color: var(--rose-gold-light);
+      letter-spacing: 0.04em;
+    }
+    .logo span { color: var(--white); font-style: italic; }
+    .nav-back {
+      color: var(--rose-gold-light);
+      font-size: 0.85rem;
+      text-decoration: none;
+      opacity: 0.8;
+      transition: opacity 0.2s;
+    }
+    .nav-back:hover { opacity: 1; }
+
+    /* HERO */
+    .hero {
+      background: linear-gradient(135deg, var(--deep-plum) 0%, var(--plum-mid) 100%);
+      padding: 48px 40px 36px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '✦';
+      position: absolute;
+      font-size: 18rem;
+      color: rgba(255,255,255,0.03);
+      top: -60px;
+      left: 50%;
+      transform: translateX(-50%);
+      pointer-events: none;
+    }
+    .hero-badge {
+      display: inline-block;
+      background: rgba(201,149,106,0.2);
+      border: 1px solid rgba(201,149,106,0.4);
+      border-radius: 20px;
+      padding: 5px 18px;
+      font-size: 0.75rem;
+      color: var(--rose-gold-light);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 14px;
+    }
+    .hero h1 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2.6rem;
+      font-weight: 600;
+      color: var(--white);
+      line-height: 1.2;
+      margin-bottom: 10px;
+    }
+    .hero h1 em { color: var(--rose-gold-light); font-style: italic; }
+    .hero p {
+      color: rgba(255,255,255,0.6);
+      font-size: 0.9rem;
+      max-width: 400px;
+      margin: 0 auto;
+      line-height: 1.6;
+    }
+
+    /* PROGRESS */
+    .progress-wrap {
+      background: var(--white);
+      padding: 16px 40px;
+      border-bottom: 1px solid var(--cream-dark);
+    }
+    .progress-top {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 8px;
+    }
+    .progress-label {
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: var(--plum-mid);
+    }
+    .progress-count {
+      font-size: 0.78rem;
+      color: var(--muted);
+    }
+    .progress-bar {
+      height: 4px;
+      background: var(--cream-dark);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--rose-gold), var(--plum-mid));
+      border-radius: 4px;
+      transition: width 0.5s cubic-bezier(0.4,0,0.2,1);
+    }
+
+    /* MAIN */
+    .main {
+      max-width: 680px;
+      margin: 40px auto;
+      padding: 0 20px 60px;
+    }
+
+    /* QUIZ CARD */
+    .quiz-card {
+      background: var(--white);
+      border-radius: 20px;
+      padding: 36px;
+      box-shadow: 0 4px 30px rgba(74,25,66,0.08);
+      animation: slideUp 0.4s cubic-bezier(0.4,0,0.2,1);
+    }
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .q-eyebrow {
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--rose-gold);
+      margin-bottom: 10px;
+    }
+    .q-text {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.7rem;
+      font-weight: 600;
+      color: var(--deep-plum);
+      line-height: 1.3;
+      margin-bottom: 28px;
+    }
+
+    /* OPTIONS */
+    .options-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    .options-grid.single-col { grid-template-columns: 1fr; }
+
+    .option {
+      border: 2px solid var(--cream-dark);
+      border-radius: 14px;
+      padding: 16px 18px;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: var(--cream);
+    }
+    .option:hover { border-color: var(--rose-gold-light); background: var(--white); }
+    .option.selected {
+      border-color: var(--rose-gold);
+      background: rgba(201,149,106,0.08);
+    }
+    .option-emoji {
+      font-size: 1.5rem;
+      flex-shrink: 0;
+    }
+    .option-text { font-size: 0.88rem; font-weight: 500; color: var(--charcoal); line-height: 1.4; }
+    .option-sub { font-size: 0.75rem; color: var(--muted); margin-top: 2px; font-weight: 400; }
+
+    /* NAVIGATION */
+    .nav-btns {
+      display: flex;
+      gap: 12px;
+      margin-top: 28px;
+    }
+    .btn-next {
+      flex: 1;
+      background: linear-gradient(135deg, var(--rose-gold), #B8804F);
+      color: var(--white);
+      border: none;
+      border-radius: 12px;
+      padding: 15px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.92rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      letter-spacing: 0.02em;
+    }
+    .btn-next:hover { transform: translateY(-1px); box-shadow: 0 4px 16px rgba(201,149,106,0.4); }
+    .btn-next:disabled { opacity: 0.4; cursor: not-allowed; transform: none; box-shadow: none; }
+    .btn-prev {
+      background: var(--cream);
+      color: var(--plum-mid);
+      border: 1.5px solid var(--cream-dark);
+      border-radius: 12px;
+      padding: 15px 18px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.88rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .btn-prev:hover { border-color: var(--plum-mid); }
+
+    /* LOADING */
+    .loading-screen {
+      text-align: center;
+      padding: 48px 20px;
+    }
+    .sparkle-loader {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      margin-bottom: 24px;
+    }
+    .sparkle-loader span {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--rose-gold);
+      animation: bounce 1.2s infinite;
+    }
+    .sparkle-loader span:nth-child(2) { animation-delay: 0.2s; background: var(--plum-mid); }
+    .sparkle-loader span:nth-child(3) { animation-delay: 0.4s; background: var(--rose-gold-light); }
+    @keyframes bounce {
+      0%, 80%, 100% { transform: scale(0.6); opacity: 0.5; }
+      40% { transform: scale(1.2); opacity: 1; }
+    }
+    .loading-screen h3 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.5rem;
+      color: var(--deep-plum);
+      margin-bottom: 8px;
+    }
+    .loading-screen p { color: var(--muted); font-size: 0.85rem; }
+
+    /* RESULTS */
+    .results-screen { display: none; }
+    .result-header {
+      text-align: center;
+      margin-bottom: 28px;
+    }
+    .result-crown {
+      font-size: 2.5rem;
+      margin-bottom: 12px;
+      animation: popIn 0.5s cubic-bezier(0.34,1.56,0.64,1);
+    }
+    @keyframes popIn {
+      from { transform: scale(0); }
+      to { transform: scale(1); }
+    }
+    .result-header h2 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.9rem;
+      color: var(--deep-plum);
+      margin-bottom: 6px;
+    }
+    .result-header p { color: var(--muted); font-size: 0.85rem; }
+
+    .ai-response {
+      background: linear-gradient(135deg, rgba(74,25,66,0.04), rgba(201,149,106,0.06));
+      border: 1px solid rgba(201,149,106,0.2);
+      border-radius: 16px;
+      padding: 24px;
+      margin-bottom: 20px;
+      line-height: 1.8;
+      font-size: 0.9rem;
+      color: var(--charcoal);
+      white-space: pre-wrap;
+    }
+
+    .result-actions {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-top: 24px;
+    }
+    .btn-book {
+      background: linear-gradient(135deg, var(--deep-plum), var(--plum-mid));
+      color: var(--white);
+      border: none;
+      border-radius: 12px;
+      padding: 15px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      text-decoration: none;
+      display: block;
+      text-align: center;
+    }
+    .btn-book:hover { transform: translateY(-1px); box-shadow: 0 4px 18px rgba(74,25,66,0.3); }
+    .btn-retake {
+      background: var(--cream);
+      color: var(--plum-mid);
+      border: 1.5px solid var(--cream-dark);
+      border-radius: 12px;
+      padding: 15px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.88rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+      text-align: center;
+    }
+    .btn-retake:hover { border-color: var(--plum-mid); }
+
+    /* STYLE TAG */
+    .style-tag {
+      display: inline-block;
+      background: linear-gradient(135deg, var(--rose-gold), var(--plum-mid));
+      color: var(--white);
+      border-radius: 20px;
+      padding: 5px 16px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      margin-bottom: 16px;
+    }
+
+    .error-msg {
+      background: #FFF0F0;
+      border: 1px solid #FFD0D0;
+      border-radius: 10px;
+      padding: 14px 18px;
+      font-size: 0.85rem;
+      color: #C0392B;
+      margin-top: 16px;
+    }
+
+    @media (max-width: 600px) {
+      nav { padding: 14px 20px; }
+      .hero { padding: 32px 20px 24px; }
+      .hero h1 { font-size: 2rem; }
+      .progress-wrap { padding: 14px 20px; }
+      .quiz-card { padding: 24px 20px; }
+      .options-grid { grid-template-columns: 1fr; }
+      .result-actions { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="logo">Style<span>Sync</span></div>
+  <a href="stylesync-home.html" class="nav-back">← Home</a>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-badge">✦ Powered by Claude AI</div>
+  <h1>Find Your <em>Perfect</em><br/>Glow-Up</h1>
+  <p>Answer 6 quick questions — our AI stylist will match you with the right services and salons in Chennai.</p>
+</div>
+
+<!-- PROGRESS -->
+<div class="progress-wrap" id="progressWrap">
+  <div class="progress-top">
+    <span class="progress-label" id="progressLabel">Question 1 of 6</span>
+    <span class="progress-count" id="progressCount">Just starting!</span>
+  </div>
+  <div class="progress-bar">
+    <div class="progress-fill" id="progressFill" style="width: 16.6%"></div>
+  </div>
+</div>
+
+<!-- MAIN -->
+<div class="main">
+  <div class="quiz-card" id="quizCard">
+
+    <!-- QUIZ SECTION -->
+    <div id="quizSection">
+      <div class="q-eyebrow" id="qEyebrow">Your Hair</div>
+      <div class="q-text" id="qText">What's your hair type?</div>
+      <div class="options-grid" id="optionsGrid"></div>
+      <div class="nav-btns">
+        <button class="btn-prev" id="btnPrev" onclick="prevQ()" style="display:none;">← Back</button>
+        <button class="btn-next" id="btnNext" onclick="nextQ()" disabled>Continue →</button>
+      </div>
+    </div>
+
+    <!-- LOADING SECTION -->
+    <div id="loadingSection" style="display:none;">
+      <div class="loading-screen">
+        <div class="sparkle-loader">
+          <span></span><span></span><span></span>
+        </div>
+        <h3>Reading your vibe…</h3>
+        <p>Our AI stylist is crafting your personalized glow-up plan ✨</p>
+      </div>
+    </div>
+
+    <!-- RESULTS SECTION -->
+    <div id="resultsSection" style="display:none;">
+      <div class="result-header">
+        <div class="result-crown">👑</div>
+        <h2>Your Style Report is Ready!</h2>
+        <p>Curated just for you by StyleSync AI</p>
+      </div>
+      <div class="style-tag" id="styleTag">✦ Your Style</div>
+      <div class="ai-response" id="aiResponse"></div>
+      <div class="result-actions">
+        <a href="stylesync-booking.html" class="btn-book">Book Now ✦</a>
+        <div class="btn-retake" onclick="retakeQuiz()">Retake Quiz</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+  const questions = [
+    {
+      eyebrow: 'Your Hair',
+      text: 'What\'s your hair type?',
+      options: [
+        { emoji: '🌊', text: 'Wavy & frizzy', sub: 'Gets puffy in humidity' },
+        { emoji: '➰', text: 'Curly & thick', sub: 'Big volume, hard to manage' },
+        { emoji: '📏', text: 'Straight & fine', sub: 'Lacks volume sometimes' },
+        { emoji: '🔥', text: 'Damaged & dry', sub: 'Chemically treated or heat-damaged' },
+      ]
+    },
+    {
+      eyebrow: 'Your Skin',
+      text: 'How does your skin feel by afternoon?',
+      options: [
+        { emoji: '✨', text: 'Oily & shiny', sub: 'T-zone gets greasy' },
+        { emoji: '🏜️', text: 'Dry & tight', sub: 'Feels stretchy after washing' },
+        { emoji: '⚖️', text: 'Combination', sub: 'Oily nose, dry cheeks' },
+        { emoji: '🌿', text: 'Sensitive', sub: 'Reacts to products easily' },
+      ]
+    },
+    {
+      eyebrow: 'The Occasion',
+      text: 'What\'s your main reason for this visit?',
+      options: [
+        { emoji: '💍', text: 'Wedding / Event', sub: 'Bridal, bridesmaid or guest look' },
+        { emoji: '👩‍💼', text: 'Professional refresh', sub: 'Job interview or office ready' },
+        { emoji: '🎉', text: 'Just treating myself', sub: 'Monthly self-care ritual' },
+        { emoji: '🔄', text: 'Total makeover', sub: 'New look, new me energy' },
+      ]
+    },
+    {
+      eyebrow: 'Your Vibe',
+      text: 'Pick the aesthetic that feels most like you:',
+      options: [
+        { emoji: '🌸', text: 'Soft & feminine', sub: 'Pastel, floral, delicate' },
+        { emoji: '🖤', text: 'Bold & edgy', sub: 'Dark tones, statement looks' },
+        { emoji: '☀️', text: 'Natural & fresh', sub: 'Minimal, clean, effortless' },
+        { emoji: '💫', text: 'Glamorous', sub: 'Full glam, shine & drama' },
+      ]
+    },
+    {
+      eyebrow: 'Your Location',
+      text: 'Which area of Chennai are you in?',
+      options: [
+        { emoji: '🌴', text: 'South Chennai', sub: 'Adyar, Velachery, OMR' },
+        { emoji: '🏙️', text: 'Central Chennai', sub: 'T. Nagar, Anna Nagar, Egmore' },
+        { emoji: '🌆', text: 'North Chennai', sub: 'Kolathur, Perambur, Royapuram' },
+        { emoji: '🚀', text: 'West Chennai', sub: 'Porur, Ambattur, Vadapalani' },
+      ]
+    },
+    {
+      eyebrow: 'Your Budget',
+      text: 'What\'s your comfort zone for this session?',
+      options: [
+        { emoji: '💚', text: 'Under ₹500', sub: 'Quick, affordable treatments' },
+        { emoji: '💛', text: '₹500 – ₹1,500', sub: 'Mid-range, good quality' },
+        { emoji: '🧡', text: '₹1,500 – ₹4,000', sub: 'Premium experience' },
+        { emoji: '❤️', text: '₹4,000+', sub: 'Full luxury, no limits' },
+      ]
+    },
+  ];
+
+  let current = 0;
+  let answers = [];
+
+  function renderQuestion() {
+    const q = questions[current];
+    document.getElementById('qEyebrow').textContent = q.eyebrow;
+    document.getElementById('qText').textContent = q.text;
+
+    const grid = document.getElementById('optionsGrid');
+    grid.innerHTML = '';
+    grid.className = 'options-grid';
+
+    q.options.forEach((opt, i) => {
+      const div = document.createElement('div');
+      div.className = 'option';
+      div.innerHTML = `<div class="option-emoji">${opt.emoji}</div><div><div class="option-text">${opt.text}</div><div class="option-sub">${opt.sub}</div></div>`;
+      div.onclick = () => selectOption(div, opt.text, i);
+      if (answers[current] && answers[current].text === opt.text) {
+        div.classList.add('selected');
+      }
+      grid.appendChild(div);
+    });
+
+    // Progress
+    const pct = ((current + 1) / questions.length) * 100;
+    document.getElementById('progressFill').style.width = pct + '%';
+    document.getElementById('progressLabel').textContent = `Question ${current + 1} of ${questions.length}`;
+    const labels = ['Just starting!', 'Getting there…', 'Halfway there!', 'Almost done!', 'One more!', 'Last one!'];
+    document.getElementById('progressCount').textContent = labels[current] || '';
+
+    document.getElementById('btnPrev').style.display = current > 0 ? 'block' : 'none';
+    document.getElementById('btnNext').textContent = current === questions.length - 1 ? 'Get My Style Report ✦' : 'Continue →';
+    document.getElementById('btnNext').disabled = !answers[current];
+
+    // Re-animate card
+    const card = document.getElementById('quizCard');
+    card.style.animation = 'none';
+    card.offsetHeight;
+    card.style.animation = 'slideUp 0.4s cubic-bezier(0.4,0,0.2,1)';
+  }
+
+  function selectOption(el, text, idx) {
+    document.querySelectorAll('.option').forEach(o => o.classList.remove('selected'));
+    el.classList.add('selected');
+    answers[current] = { text, emoji: questions[current].options[idx].emoji };
+    document.getElementById('btnNext').disabled = false;
+  }
+
+  function nextQ() {
+    if (!answers[current]) return;
+    if (current < questions.length - 1) {
+      current++;
+      renderQuestion();
+    } else {
+      submitQuiz();
+    }
+  }
+
+  function prevQ() {
+    if (current > 0) {
+      current--;
+      renderQuestion();
+    }
+  }
+
+  function getMockResponse(answers) {
+    const hair = answers[0]?.text || '';
+    const skin = answers[1]?.text || '';
+    const occasion = answers[2]?.text || '';
+    const vibe = answers[3]?.text || '';
+    const area = answers[4]?.text || '';
+    const budget = answers[5]?.text || '';
+
+    // Style identity logic
+    const styleProfiles = {
+      'Glamorous': { tag: '✦ Glam Chennai Queen', intro: 'You live for drama, shine, and that full-glam moment. Every visit to the salon is an event for you — and it should be!' },
+      'Soft & feminine': { tag: '✦ Dewy Petal Babe', intro: 'Soft, pretty, and effortlessly feminine — your style is all about that fresh-from-a-garden glow that Chennai girls absolutely love.' },
+      'Natural & fresh': { tag: '✦ Effortless Natural', intro: 'Clean, confident, and low-maintenance chic — you know that great skin and healthy hair are the real flex.' },
+      'Bold & edgy': { tag: '✦ Bold Tamil Trendsetter', intro: 'You set trends, not follow them. Dark tones, statement looks, and fearless choices — your salon visit is always a transformation.' },
+    };
+    const profile = styleProfiles[vibe] || { tag: '✦ Chennai Style Icon', intro: 'You have a unique sense of style that\'s all your own — and the right salon in Chennai will bring it to life perfectly.' };
+
+    // Service recommendations based on hair + occasion
+    const serviceMap = {
+      'Wavy & frizzy': 'Keratin Smoothening Treatment — tames frizz and gives you that sleek, humidity-proof finish Chennai weather demands.',
+      'Curly & thick': 'Deep Conditioning Hair Spa — restores moisture and defines your natural curl pattern beautifully.',
+      'Straight & fine': 'Volume Boost Blow-dry — adds life and body to fine hair for a full, bouncy look.',
+      'Damaged & dry': 'Protein Hair Treatment — repairs damage from within and brings back your hair\'s natural shine.',
+    };
+    const occasionMap = {
+      'Wedding / Event': 'Bridal / Party Makeup — full coverage, long-lasting look that photographs beautifully under Chennai lights.',
+      'Professional refresh': 'Clean Blow-dry & Trim — polished, interview-ready look that stays sharp all day.',
+      'Just treating myself': 'Relaxing Head Spa Massage — ultimate self-care that relieves stress and nourishes your scalp.',
+      'Total makeover': 'Hair Colour Consultation — a new shade can completely transform your energy and confidence.',
+    };
+    const skinMap = {
+      'Oily & shiny': 'Oil-Control Facial — deep cleanse that keeps your T-zone shine-free even in Chennai heat.',
+      'Dry & tight': 'Hydrating Glow Facial — intense moisture boost that leaves skin soft and plump.',
+      'Combination': 'Brightening Cleanup — balances your skin and gives an even, radiant finish.',
+      'Sensitive': 'Calming Herbal Facial — gentle, soothing treatment perfect for reactive skin types.',
+    };
+
+    // Budget tip
+    const budgetTips = {
+      'Under ₹500': 'Stick to express treatments — a quick cleanup or blow-dry gives maximum impact for minimum spend.',
+      '₹500 – ₹1,500': 'You\'re in the sweet spot! Most quality salons in Chennai offer excellent hair and skin packages in this range.',
+      '₹1,500 – ₹4,000': 'Treat yourself to a combo package — hair + skin together in one luxurious session.',
+      '₹4,000+': 'Go full luxury — book a premium salon in Nungambakkam or T.Nagar for the complete head-to-toe experience.',
+    };
+
+    const service1 = serviceMap[hair] || 'Customised Hair Treatment — tailored to your specific hair needs for best results.';
+    const service2 = occasionMap[occasion] || 'Full Glam Makeup Session — perfect for any special occasion.';
+    const service3 = skinMap[skin] || 'Personalised Facial — chosen based on your skin type for a healthy, glowing complexion.';
+    const budgetTip = budgetTips[budget] || 'Choose a package that combines hair and skin services for the best value.';
+
+    const response = `Your Style Profile
+${profile.intro}
+
+Recommended Services for You
+
+1. ${service1}
+
+2. ${service2}
+
+3. ${service3}
+
+4. Nail Art & Finishing — complete your look from fingertips to hair for that total head-to-toe glow.
+
+Stylist Tips Just for You
+
+✦ ${budgetTip}
+
+✦ ${hair.includes('frizzy') || hair.includes('damaged') ? 'Avoid heat styling 2-3 days after your treatment to lock in the results longer.' : 'Regular trims every 6-8 weeks keep your style looking fresh and healthy.'}
+
+✦ ${skin.includes('Oily') ? 'Always ask your stylist for oil-free products — especially important in Chennai\'s humid climate.' : 'Request a scalp massage add-on — it improves blood circulation and makes your treatment extra effective.'}
+
+✦ Salons near ${area.replace('South Chennai', 'Adyar & Velachery').replace('Central Chennai', 'T.Nagar & Anna Nagar').replace('North Chennai', 'Kolathur & Perambur').replace('West Chennai', 'Porur & Vadapalani')} are your best bet for quick access and familiar local style sensibilities. Book early on weekends — they fill up fast! 🌸`;
+
+    return { tag: profile.tag, text: response };
+  }
+
+  async function submitQuiz() {
+    document.getElementById('quizSection').style.display = 'none';
+    document.getElementById('progressWrap').style.display = 'none';
+    document.getElementById('loadingSection').style.display = 'block';
+
+    // Simulate AI thinking time for realistic feel
+    await new Promise(resolve => setTimeout(resolve, 2800));
+
+    const { tag, text } = getMockResponse(answers);
+
+    document.getElementById('loadingSection').style.display = 'none';
+    document.getElementById('resultsSection').style.display = 'block';
+    document.getElementById('styleTag').textContent = tag;
+    document.getElementById('aiResponse').textContent = text;
+  }
+
+  function retakeQuiz() {
+    current = 0;
+    answers = [];
+    document.getElementById('resultsSection').style.display = 'none';
+    document.getElementById('quizSection').style.display = 'block';
+    document.getElementById('progressWrap').style.display = 'block';
+    renderQuestion();
+  }
+
+  // INIT
+  renderQuestion();
+</script>
+</body>
+</html>

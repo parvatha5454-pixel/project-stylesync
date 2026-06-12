@@ -1,0 +1,1102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>StyleSync — Glow Up, Chennai Style</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,900;1,400;1,600&family=Inter:wght@300;400;500;600&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+<style>
+  /* ─── TOKENS ─── */
+  :root {
+    --rose:    #C9956C;
+    --rose-lt: #E8C4A8;
+    --rose-dk: #A87350;
+    --plum:    #4A1942;
+    --plum-lt: #6B2E61;
+    --plum-dk: #2E0F29;
+    --cream:   #FFF8F0;
+    --cream-dk:#F5EDE0;
+    --white:   #FFFFFF;
+    --text:    #1A0D18;
+    --muted:   #7A5C74;
+    --border:  rgba(74,25,66,0.12);
+
+    --shadow-sm: 0 2px 12px rgba(74,25,66,0.08);
+    --shadow-md: 0 8px 32px rgba(74,25,66,0.12);
+    --shadow-lg: 0 24px 64px rgba(74,25,66,0.16);
+
+    --r-sm: 12px;
+    --r-md: 20px;
+    --r-lg: 32px;
+    --r-xl: 48px;
+
+    --font-display: 'Playfair Display', Georgia, serif;
+    --font-body:    'DM Sans', 'Inter', sans-serif;
+  }
+
+  /* ─── RESET ─── */
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: var(--font-body);
+    background: var(--cream);
+    color: var(--text);
+    overflow-x: hidden;
+    line-height: 1.6;
+  }
+  img { display: block; max-width: 100%; }
+  a  { text-decoration: none; color: inherit; }
+  button { cursor: pointer; border: none; font-family: inherit; }
+  ul { list-style: none; }
+
+  /* ─── SCROLLBAR ─── */
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: var(--cream); }
+  ::-webkit-scrollbar-thumb { background: var(--rose-lt); border-radius: 99px; }
+
+  /* ─── NAVBAR ─── */
+  .nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 5%;
+    height: 70px;
+    background: rgba(255,248,240,0.85);
+    backdrop-filter: blur(18px);
+    border-bottom: 1px solid var(--border);
+    transition: box-shadow 0.3s;
+  }
+  .nav.scrolled { box-shadow: var(--shadow-sm); }
+  .nav-logo {
+    display: flex; align-items: center; gap: 10px;
+    font-family: var(--font-display); font-size: 1.5rem; font-weight: 700;
+    color: var(--plum);
+  }
+  .nav-logo span { color: var(--rose); }
+  .nav-logo-icon {
+    width: 36px; height: 36px;
+    background: linear-gradient(135deg, var(--rose), var(--plum));
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.1rem;
+  }
+  .nav-links {
+    display: flex; align-items: center; gap: 32px;
+    font-size: 0.875rem; font-weight: 500; color: var(--muted);
+  }
+  .nav-links a:hover { color: var(--plum); }
+  .nav-cta {
+    background: var(--plum);
+    color: var(--white);
+    padding: 10px 22px;
+    border-radius: 99px;
+    font-size: 0.875rem; font-weight: 500;
+    transition: background 0.2s, transform 0.2s;
+  }
+  .nav-cta:hover { background: var(--plum-lt); transform: translateY(-1px); }
+  .nav-mobile-btn { display: none; background: none; font-size: 1.4rem; color: var(--plum); }
+
+  /* ─── HERO ─── */
+  .hero {
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+    padding: 100px 5% 60px;
+    gap: 60px;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute; inset: 0;
+    background:
+      radial-gradient(ellipse 60% 70% at 80% 50%, rgba(201,149,108,0.15) 0%, transparent 60%),
+      radial-gradient(ellipse 40% 50% at 10% 80%, rgba(74,25,66,0.08) 0%, transparent 50%);
+    pointer-events: none;
+  }
+  /* decorative blobs */
+  .hero-blob {
+    position: absolute; border-radius: 50%; filter: blur(80px); pointer-events: none; opacity: 0.5;
+  }
+  .hero-blob-1 { width: 400px; height: 400px; background: var(--rose-lt); top: -100px; right: -80px; }
+  .hero-blob-2 { width: 300px; height: 300px; background: rgba(74,25,66,0.15); bottom: 0; right: 30%; }
+
+  .hero-left { position: relative; z-index: 2; animation: fadeUp 0.9s ease both; }
+
+  .hero-badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: rgba(201,149,108,0.15);
+    border: 1px solid rgba(201,149,108,0.3);
+    border-radius: 99px;
+    padding: 6px 16px;
+    font-size: 0.8rem; font-weight: 500; color: var(--rose-dk);
+    margin-bottom: 24px;
+    animation: fadeUp 0.9s 0.1s ease both;
+  }
+  .hero-badge::before { content: '✦'; font-size: 0.7rem; }
+
+  .hero-h1 {
+    font-family: var(--font-display);
+    font-size: clamp(2.6rem, 5vw, 4rem);
+    font-weight: 900;
+    line-height: 1.1;
+    color: var(--plum);
+    margin-bottom: 20px;
+    animation: fadeUp 0.9s 0.15s ease both;
+  }
+  .hero-h1 em { color: var(--rose); font-style: italic; }
+
+  .hero-sub {
+    font-size: 1.05rem; color: var(--muted); max-width: 440px;
+    margin-bottom: 36px; font-weight: 300; line-height: 1.7;
+    animation: fadeUp 0.9s 0.25s ease both;
+  }
+
+  /* search bar */
+  .search-wrap {
+    background: var(--white);
+    border-radius: var(--r-xl);
+    box-shadow: var(--shadow-lg);
+    padding: 8px 8px 8px 24px;
+    display: flex; align-items: center; gap: 12px;
+    max-width: 520px;
+    border: 1.5px solid var(--border);
+    animation: fadeUp 0.9s 0.35s ease both;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+  .search-wrap:focus-within {
+    border-color: var(--rose);
+    box-shadow: 0 0 0 4px rgba(201,149,108,0.15), var(--shadow-lg);
+  }
+  .search-icon { font-size: 1.1rem; color: var(--muted); flex-shrink: 0; }
+  .search-wrap input {
+    flex: 1; border: none; outline: none; background: transparent;
+    font-family: var(--font-body); font-size: 0.95rem; color: var(--text);
+  }
+  .search-wrap input::placeholder { color: var(--muted); }
+  .search-btn {
+    background: linear-gradient(135deg, var(--rose), var(--rose-dk));
+    color: var(--white); padding: 12px 28px; border-radius: 99px;
+    font-size: 0.875rem; font-weight: 600;
+    transition: transform 0.2s, box-shadow 0.2s;
+    white-space: nowrap;
+    box-shadow: 0 4px 16px rgba(201,149,108,0.4);
+  }
+  .search-btn:hover { transform: translateY(-1px); box-shadow: 0 8px 24px rgba(201,149,108,0.5); }
+
+  .search-tags {
+    display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px;
+    animation: fadeUp 0.9s 0.45s ease both;
+  }
+  .search-tag {
+    background: rgba(74,25,66,0.06);
+    border: 1px solid var(--border);
+    border-radius: 99px; padding: 5px 14px;
+    font-size: 0.78rem; color: var(--muted); font-weight: 500;
+    cursor: pointer; transition: all 0.2s;
+  }
+  .search-tag:hover { background: var(--plum); color: var(--white); border-color: var(--plum); }
+
+  /* hero stats */
+  .hero-stats {
+    display: flex; gap: 32px; margin-top: 40px;
+    animation: fadeUp 0.9s 0.55s ease both;
+  }
+  .hero-stat {}
+  .hero-stat-num {
+    font-family: var(--font-display); font-size: 1.8rem; font-weight: 700;
+    color: var(--plum); line-height: 1;
+  }
+  .hero-stat-num span { color: var(--rose); }
+  .hero-stat-label { font-size: 0.78rem; color: var(--muted); margin-top: 4px; }
+
+  /* hero visual */
+  .hero-right {
+    position: relative; z-index: 2;
+    animation: fadeUp 0.9s 0.2s ease both;
+  }
+  .hero-visual {
+    position: relative;
+    width: 100%; aspect-ratio: 0.85;
+    max-width: 460px; margin: auto;
+  }
+  /* main card */
+  .hv-main {
+    position: absolute; inset: 0;
+    background: linear-gradient(160deg, var(--plum-lt) 0%, var(--plum-dk) 100%);
+    border-radius: var(--r-lg);
+    overflow: hidden;
+    box-shadow: var(--shadow-lg);
+  }
+  .hv-main-img {
+    width: 100%; height: 100%; object-fit: cover; opacity: 0.55;
+    background: linear-gradient(160deg, #8B5C85 0%, #3D1238 100%);
+  }
+  /* gradient overlay on main card */
+  .hv-main::after {
+    content: '';
+    position: absolute; inset: 0;
+    background: linear-gradient(to top, rgba(46,15,41,0.9) 0%, transparent 60%);
+  }
+  .hv-main-text {
+    position: absolute; bottom: 0; left: 0; right: 0; z-index: 2;
+    padding: 28px;
+  }
+  .hv-main-text h3 {
+    font-family: var(--font-display); font-size: 1.3rem; font-weight: 700;
+    color: var(--white); line-height: 1.3;
+  }
+  .hv-main-text p { font-size: 0.8rem; color: rgba(255,248,240,0.65); margin-top: 4px; }
+  .hv-stars { display: flex; gap: 3px; margin-top: 10px; }
+  .hv-stars span { font-size: 0.75rem; color: #F5C842; }
+  /* floating cards */
+  .hv-float {
+    position: absolute;
+    background: rgba(255,255,255,0.95);
+    backdrop-filter: blur(16px);
+    border-radius: var(--r-md);
+    padding: 14px 18px;
+    box-shadow: var(--shadow-md);
+    animation: float 3s ease-in-out infinite;
+  }
+  .hv-float-1 { top: -20px; right: -20px; animation-delay: 0s; }
+  .hv-float-2 { bottom: 80px; left: -30px; animation-delay: 1.5s; }
+  .hv-float-label { font-size: 0.7rem; color: var(--muted); font-weight: 500; }
+  .hv-float-val {
+    font-family: var(--font-display); font-size: 1.1rem; font-weight: 700;
+    color: var(--plum); margin-top: 2px;
+  }
+  .hv-float-icon { font-size: 1.4rem; margin-bottom: 4px; }
+  /* pill badges on hero right */
+  .hv-pill {
+    position: absolute; top: 40%;  right: -40px;
+    display: flex; align-items: center; gap: 6px;
+    background: var(--rose);
+    color: var(--white); font-size: 0.72rem; font-weight: 600;
+    padding: 6px 14px; border-radius: 99px;
+    box-shadow: 0 4px 16px rgba(201,149,108,0.4);
+    animation: float 3s 0.8s ease-in-out infinite;
+  }
+
+  /* ─── SECTION BASE ─── */
+  .section { padding: 80px 5%; }
+  .section-header { text-align: center; margin-bottom: 48px; }
+  .section-label {
+    display: inline-block;
+    font-size: 0.75rem; font-weight: 600; letter-spacing: 0.12em;
+    text-transform: uppercase; color: var(--rose-dk);
+    margin-bottom: 12px;
+  }
+  .section-title {
+    font-family: var(--font-display); font-size: clamp(1.8rem, 3vw, 2.6rem);
+    font-weight: 700; color: var(--plum); line-height: 1.2;
+  }
+  .section-sub { color: var(--muted); font-size: 0.95rem; margin-top: 10px; max-width: 500px; margin-inline: auto; }
+
+  /* ─── SERVICES GRID ─── */
+  .services { background: var(--white); }
+  .services-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 16px;
+  }
+  .service-card {
+    background: var(--cream);
+    border: 1.5px solid var(--border);
+    border-radius: var(--r-md);
+    overflow: hidden;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+  }
+  .service-card-img {
+    width: 100%; height: 130px; object-fit: cover;
+    display: block; transition: transform 0.4s;
+  }
+  .service-card:hover .service-card-img { transform: scale(1.07); }
+  .service-card-body { padding: 14px 16px; }
+  .service-card::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: linear-gradient(135deg, var(--rose-lt), var(--rose));
+    opacity: 0; transition: opacity 0.3s; pointer-events: none;
+  }
+  .service-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-md); border-color: var(--rose); }
+  .service-card:hover::before { opacity: 0.06; }
+  .service-card-name { font-weight: 600; font-size: 0.9rem; color: var(--plum); position: relative; z-index: 1; }
+  .service-card-count { font-size: 0.75rem; color: var(--muted); margin-top: 4px; position: relative; z-index: 1; }
+
+  /* ─── FEATURED SALONS ─── */
+  .featured { background: var(--cream); }
+  .salons-carousel-wrap { position: relative; }
+  .salons-carousel {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 24px;
+  }
+  .salon-card {
+    background: var(--white);
+    border-radius: var(--r-md);
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--border);
+    transition: all 0.3s;
+    cursor: pointer;
+  }
+  .salon-card:hover { transform: translateY(-6px); box-shadow: var(--shadow-lg); }
+  .salon-card-img {
+    height: 190px; position: relative; overflow: hidden;
+    background: linear-gradient(135deg, var(--rose-lt), var(--plum-lt));
+  }
+  .salon-card-img-inner {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    transition: transform 0.4s;
+    display: block;
+  }
+  .salon-card:hover .salon-card-img-inner { transform: scale(1.08); }
+  .salon-tag {
+    position: absolute; top: 12px; left: 12px;
+    background: var(--white); color: var(--plum);
+    font-size: 0.7rem; font-weight: 600;
+    padding: 4px 10px; border-radius: 99px;
+    box-shadow: var(--shadow-sm);
+  }
+  .salon-fav {
+    position: absolute; top: 12px; right: 12px;
+    width: 32px; height: 32px; border-radius: 50%;
+    background: rgba(255,255,255,0.9); border: none; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.9rem; transition: transform 0.2s;
+  }
+  .salon-fav:hover { transform: scale(1.2); }
+  .salon-card-body { padding: 20px; }
+  .salon-card-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px; }
+  .salon-card-name { font-family: var(--font-display); font-size: 1.1rem; font-weight: 600; color: var(--plum); }
+  .salon-rating {
+    display: flex; align-items: center; gap: 4px;
+    background: rgba(245,200,66,0.12); border: 1px solid rgba(245,200,66,0.25);
+    padding: 3px 8px; border-radius: 99px;
+    font-size: 0.78rem; font-weight: 600; color: #B8960A;
+  }
+  .salon-card-area { font-size: 0.8rem; color: var(--muted); display: flex; align-items: center; gap: 4px; }
+  .salon-tags { display: flex; flex-wrap: wrap; gap: 6px; margin: 12px 0; }
+  .stag {
+    background: rgba(74,25,66,0.07);
+    color: var(--plum); font-size: 0.72rem; font-weight: 500;
+    padding: 3px 10px; border-radius: 99px;
+  }
+  .salon-card-foot { display: flex; justify-content: space-between; align-items: center; margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--border); }
+  .salon-price { font-size: 0.82rem; color: var(--muted); }
+  .salon-price strong { color: var(--rose-dk); font-size: 1rem; }
+  .salon-book-btn {
+    background: var(--plum); color: var(--white);
+    padding: 8px 18px; border-radius: 99px;
+    font-size: 0.8rem; font-weight: 600;
+    transition: all 0.2s;
+  }
+  .salon-book-btn:hover { background: var(--plum-lt); transform: translateY(-1px); }
+
+  /* ─── AREAS STRIP ─── */
+  .areas { background: var(--plum); padding: 60px 5%; }
+  .areas .section-label { color: rgba(201,149,108,0.8); }
+  .areas .section-title { color: var(--white); }
+  .areas-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 16px; margin-top: 40px;
+  }
+  .area-card {
+    background: rgba(255,255,255,0.07);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: var(--r-md); padding: 24px 20px;
+    text-align: center; cursor: pointer;
+    transition: all 0.2s;
+  }
+  .area-card:hover { background: rgba(201,149,108,0.2); border-color: var(--rose); transform: translateY(-3px); }
+  .area-icon { font-size: 1.8rem; margin-bottom: 10px; }
+  .area-name { font-weight: 600; color: var(--white); font-size: 0.9rem; }
+  .area-count { font-size: 0.75rem; color: rgba(255,248,240,0.55); margin-top: 4px; }
+
+  /* ─── AI FEATURE ─── */
+  .ai-section {
+    background: var(--cream-dk);
+    padding: 80px 5%;
+  }
+  .ai-inner {
+    background: linear-gradient(135deg, var(--plum), var(--plum-lt));
+    border-radius: var(--r-lg);
+    padding: 64px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 48px;
+    align-items: center;
+    position: relative; overflow: hidden;
+  }
+  .ai-inner::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse 60% 80% at 100% 0%, rgba(201,149,108,0.2) 0%, transparent 60%);
+    pointer-events: none;
+  }
+  .ai-badge {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: rgba(201,149,108,0.2); border: 1px solid rgba(201,149,108,0.3);
+    border-radius: 99px; padding: 5px 14px;
+    font-size: 0.75rem; font-weight: 600; color: var(--rose-lt);
+    margin-bottom: 20px;
+  }
+  .ai-title {
+    font-family: var(--font-display); font-size: clamp(1.6rem, 2.5vw, 2.4rem);
+    font-weight: 700; color: var(--white); line-height: 1.2; margin-bottom: 16px;
+  }
+  .ai-title em { color: var(--rose-lt); font-style: italic; }
+  .ai-desc { color: rgba(255,248,240,0.7); font-size: 0.95rem; line-height: 1.7; margin-bottom: 28px; }
+  .ai-features { display: flex; flex-direction: column; gap: 14px; margin-bottom: 32px; }
+  .ai-feat { display: flex; align-items: center; gap: 12px; color: rgba(255,248,240,0.85); font-size: 0.88rem; }
+  .ai-feat-icon {
+    width: 32px; height: 32px; flex-shrink: 0;
+    background: rgba(201,149,108,0.2); border-radius: 8px;
+    display: flex; align-items: center; justify-content: center; font-size: 0.9rem;
+  }
+  .ai-cta-btn {
+    background: var(--rose); color: var(--white);
+    padding: 14px 32px; border-radius: 99px;
+    font-size: 0.9rem; font-weight: 600;
+    box-shadow: 0 4px 20px rgba(201,149,108,0.4);
+    transition: all 0.2s; display: inline-flex; align-items: center; gap: 8px;
+  }
+  .ai-cta-btn:hover { background: var(--rose-dk); transform: translateY(-2px); box-shadow: 0 8px 28px rgba(201,149,108,0.5); }
+  /* AI quiz card preview */
+  .ai-quiz-card {
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: var(--r-md); padding: 28px;
+    backdrop-filter: blur(10px);
+    position: relative; z-index: 1;
+  }
+  .ai-quiz-card h4 { font-family: var(--font-display); font-size: 1rem; color: var(--white); margin-bottom: 18px; }
+  .quiz-option {
+    background: rgba(255,255,255,0.07);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 10px; padding: 12px 16px;
+    margin-bottom: 10px; cursor: pointer;
+    display: flex; align-items: center; gap: 10px;
+    font-size: 0.85rem; color: rgba(255,248,240,0.8);
+    transition: all 0.2s;
+  }
+  .quiz-option:hover,
+  .quiz-option.active { background: rgba(201,149,108,0.25); border-color: var(--rose); color: var(--white); }
+  .quiz-option span { font-size: 1.1rem; }
+  .quiz-next {
+    width: 100%; background: var(--rose); color: var(--white);
+    padding: 12px; border-radius: 10px;
+    font-size: 0.85rem; font-weight: 600; margin-top: 16px;
+    transition: background 0.2s;
+  }
+  .quiz-next:hover { background: var(--rose-dk); }
+
+  /* ─── TESTIMONIALS ─── */
+  .testimonials { background: var(--white); }
+  .testimonials-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 20px;
+  }
+  .testi-card {
+    background: var(--cream);
+    border: 1px solid var(--border);
+    border-radius: var(--r-md); padding: 28px;
+    position: relative; overflow: hidden;
+    transition: all 0.2s;
+  }
+  .testi-card:hover { box-shadow: var(--shadow-md); transform: translateY(-3px); }
+  .testi-quote { font-size: 3rem; color: var(--rose-lt); line-height: 0.8; margin-bottom: 12px; font-family: Georgia; }
+  .testi-text { font-size: 0.9rem; color: var(--text); line-height: 1.7; font-style: italic; margin-bottom: 20px; }
+  .testi-author { display: flex; align-items: center; gap: 12px; }
+  .testi-avatar {
+    width: 40px; height: 40px; border-radius: 50%;
+    background: linear-gradient(135deg, var(--rose-lt), var(--rose));
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1rem; font-weight: 700; color: var(--white);
+    flex-shrink: 0;
+  }
+  .testi-name { font-weight: 600; font-size: 0.85rem; color: var(--plum); }
+  .testi-area { font-size: 0.75rem; color: var(--muted); }
+  .testi-stars { display: flex; gap: 2px; margin-left: auto; font-size: 0.75rem; color: #F5C842; }
+
+  /* ─── HOW IT WORKS ─── */
+  .how { background: var(--cream-dk); }
+  .how-steps {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 32px; position: relative;
+  }
+  .how-steps::before {
+    content: '';
+    position: absolute; top: 28px; left: 10%; right: 10%;
+    height: 1px; background: linear-gradient(90deg, var(--rose-lt), var(--rose), var(--rose-lt));
+    z-index: 0;
+  }
+  .how-step { text-align: center; position: relative; z-index: 1; }
+  .how-step-num {
+    width: 56px; height: 56px; border-radius: 50%;
+    background: linear-gradient(135deg, var(--rose), var(--rose-dk));
+    color: var(--white); font-family: var(--font-display); font-size: 1.2rem; font-weight: 700;
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 20px;
+    box-shadow: 0 4px 16px rgba(201,149,108,0.4);
+  }
+  .how-step-icon { font-size: 1.6rem; margin-bottom: 10px; }
+  .how-step h4 { font-weight: 600; color: var(--plum); margin-bottom: 8px; }
+  .how-step p { font-size: 0.82rem; color: var(--muted); line-height: 1.6; }
+
+  /* ─── DOWNLOAD CTA ─── */
+  .download-cta {
+    background: var(--cream);
+    padding: 80px 5%;
+    text-align: center;
+  }
+  .download-inner {
+    max-width: 600px; margin: auto;
+  }
+  .download-cta .section-title { margin-bottom: 14px; }
+  .download-cta p { color: var(--muted); font-size: 0.95rem; margin-bottom: 32px; }
+  .cta-btns { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
+  .cta-primary {
+    background: linear-gradient(135deg, var(--plum), var(--plum-lt));
+    color: var(--white); padding: 16px 36px; border-radius: 99px;
+    font-size: 0.95rem; font-weight: 600;
+    box-shadow: var(--shadow-md);
+    transition: all 0.2s;
+  }
+  .cta-primary:hover { transform: translateY(-2px); box-shadow: var(--shadow-lg); }
+  .cta-secondary {
+    background: var(--white); color: var(--plum);
+    border: 1.5px solid var(--border);
+    padding: 16px 36px; border-radius: 99px;
+    font-size: 0.95rem; font-weight: 600;
+    transition: all 0.2s;
+  }
+  .cta-secondary:hover { border-color: var(--plum); transform: translateY(-2px); }
+
+  /* ─── FOOTER ─── */
+  footer {
+    background: var(--plum-dk); color: rgba(255,248,240,0.6);
+    padding: 60px 5% 32px;
+  }
+  .footer-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr;
+    gap: 40px; margin-bottom: 48px;
+  }
+  .footer-brand .nav-logo { margin-bottom: 14px; color: var(--cream); }
+  .footer-brand p { font-size: 0.85rem; line-height: 1.7; }
+  .footer-col h5 { color: var(--cream); font-weight: 600; font-size: 0.875rem; margin-bottom: 16px; }
+  .footer-col ul li { margin-bottom: 10px; }
+  .footer-col ul li a { font-size: 0.82rem; transition: color 0.2s; }
+  .footer-col ul li a:hover { color: var(--rose-lt); }
+  .footer-bottom {
+    border-top: 1px solid rgba(255,255,255,0.08);
+    padding-top: 24px;
+    display: flex; justify-content: space-between; align-items: center;
+    font-size: 0.78rem; flex-wrap: wrap; gap: 12px;
+  }
+  .footer-bottom span { color: var(--rose-lt); }
+
+  /* ─── ANIMATIONS ─── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50%       { transform: translateY(-10px); }
+  }
+  @keyframes shimmer {
+    0%   { background-position: -200% center; }
+    100% { background-position:  200% center; }
+  }
+
+  /* ─── RESPONSIVE ─── */
+  @media (max-width: 960px) {
+    .hero { grid-template-columns: 1fr; padding: 100px 5% 60px; }
+    .hero-right { display: none; }
+    .how-steps { grid-template-columns: repeat(2, 1fr); }
+    .how-steps::before { display: none; }
+    .ai-inner { grid-template-columns: 1fr; padding: 40px 28px; }
+    .footer-grid { grid-template-columns: 1fr 1fr; }
+    .hero-stats { gap: 20px; }
+  }
+  @media (max-width: 600px) {
+    .nav-links { display: none; }
+    .nav-mobile-btn { display: block; }
+    .section { padding: 60px 5%; }
+    .how-steps { grid-template-columns: 1fr; }
+    .footer-grid { grid-template-columns: 1fr; }
+    .hero-h1 { font-size: 2.2rem; }
+    .search-wrap { flex-wrap: wrap; }
+  }
+
+  /* ─── UTILITY ─── */
+  .reveal {
+    opacity: 0; transform: translateY(20px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+</style>
+</head>
+<body>
+
+<!-- ── NAV ── -->
+<nav class="nav" id="nav">
+  <a href="#" class="nav-logo">
+    <div class="nav-logo-icon">✦</div>
+    Style<span>Sync</span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="stylesync-listing.html">Salons</a></li>
+    <li><a href="#services">Services</a></li>
+    <li><a href="#areas">Areas</a></li>
+    <li><a href="stylesync-quiz.html">AI Stylist</a></li>
+    <a href="stylesync-booking.html" class="nav-cta">Book Now</a>
+  </ul>
+  <button class="nav-mobile-btn" onclick="alert('Mobile menu — coming soon!')">☰</button>
+</nav>
+
+<!-- ── HERO ── -->
+<section class="hero">
+  <div class="hero-blob hero-blob-1"></div>
+  <div class="hero-blob hero-blob-2"></div>
+
+  <div class="hero-left">
+    <div class="hero-badge">Chennai's #1 Beauty Marketplace</div>
+
+    <h1 class="hero-h1">
+      Find Your<br />Perfect Salon<br />in <em>Chennai</em>
+    </h1>
+    <p class="hero-sub">
+      Discover top-rated salons across T.Nagar, Anna Nagar, Velachery &amp; more.
+      Book in seconds. Glow up instantly.
+    </p>
+
+    <div class="search-wrap">
+      <span class="search-icon">🔍</span>
+      <input type="text" placeholder="Search salon, service or area…" id="heroSearch" />
+      <button class="search-btn" onclick="handleSearch()">Search</button>
+    </div>
+
+    <div class="search-tags">
+      <span class="search-tag" onclick="setSearch('T.Nagar')">📍 T.Nagar</span>
+      <span class="search-tag" onclick="setSearch('Bridal')">💍 Bridal</span>
+      <span class="search-tag" onclick="setSearch('Facial')">✨ Facial</span>
+      <span class="search-tag" onclick="setSearch('Nail Art')">💅 Nail Art</span>
+      <span class="search-tag" onclick="setSearch('Hair Spa')">🌿 Hair Spa</span>
+    </div>
+
+    <div class="hero-stats">
+      <div class="hero-stat">
+        <div class="hero-stat-num">200<span>+</span></div>
+        <div class="hero-stat-label">Salons Listed</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-num">15<span>k+</span></div>
+        <div class="hero-stat-label">Happy Customers</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-num">4.8<span>★</span></div>
+        <div class="hero-stat-label">Avg Rating</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="hero-right">
+    <div class="hero-visual">
+      <div class="hv-main">
+        <img src="https://images.unsplash.com/photo-1633681926022-84c23e8cb2d6?w=700&q=80" alt="Glam Studio Salon" style="width:100%;height:100%;object-fit:cover;opacity:0.65;display:block;" loading="lazy"/>
+        <div class="hv-main-text">
+          <h3>Glam Studio, T.Nagar</h3>
+          <p>Chennai's most loved bridal destination</p>
+          <div class="hv-stars">
+            <span>★★★★★</span>
+            <span style="color:rgba(255,255,255,0.5);font-size:0.72rem;margin-left:4px;">4.8 · 320 reviews</span>
+          </div>
+        </div>
+      </div>
+      <!-- decorative elements inside card -->
+      <div style="position:absolute;top:20px;left:20px;z-index:3;display:flex;gap:8px;">
+        <div style="width:8px;height:8px;border-radius:50%;background:#FF5F57;"></div>
+        <div style="width:8px;height:8px;border-radius:50%;background:#FFBD2E;"></div>
+        <div style="width:8px;height:8px;border-radius:50%;background:#28CA41;"></div>
+      </div>
+
+      <div class="hv-float hv-float-1">
+        <div class="hv-float-icon">💅</div>
+        <div class="hv-float-label">Next Slot</div>
+        <div class="hv-float-val">2:30 PM</div>
+      </div>
+      <div class="hv-float hv-float-2">
+        <div class="hv-float-icon">⭐</div>
+        <div class="hv-float-label">Top Rated</div>
+        <div class="hv-float-val">4.9 / 5</div>
+      </div>
+      <div class="hv-pill">🔥 3 booked today</div>
+    </div>
+  </div>
+</section>
+
+<!-- ── SERVICES ── -->
+<section class="section services" id="services">
+  <div class="section-header reveal">
+    <div class="section-label">What are you looking for?</div>
+    <h2 class="section-title">Popular Services</h2>
+    <p class="section-sub">From quick blow-dries to full bridal packages — find it all on StyleSync</p>
+  </div>
+  <div class="services-grid reveal">
+    <div class="service-card">
+      <img class="service-card-img" src="https://images.unsplash.com/photo-1560066984-138dadb4c035?w=400&q=80" alt="Haircut & Style" loading="lazy"/>
+      <div class="service-card-body"><div class="service-card-name">Haircut & Style</div><div class="service-card-count">148 salons</div></div>
+    </div>
+    <div class="service-card">
+      <img class="service-card-img" src="https://images.unsplash.com/photo-1519741497674-611481863552?w=400&q=80" alt="Bridal Makeup" loading="lazy"/>
+      <div class="service-card-body"><div class="service-card-name">Bridal Makeup</div><div class="service-card-count">64 salons</div></div>
+    </div>
+    <div class="service-card">
+      <img class="service-card-img" src="https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?w=400&q=80" alt="Facial & Skin" loading="lazy"/>
+      <div class="service-card-body"><div class="service-card-name">Facial & Skin</div><div class="service-card-count">112 salons</div></div>
+    </div>
+    <div class="service-card">
+      <img class="service-card-img" src="https://images.unsplash.com/photo-1604654894610-df63bc536371?w=400&q=80" alt="Nail Art" loading="lazy"/>
+      <div class="service-card-body"><div class="service-card-name">Nail Art</div><div class="service-card-count">89 salons</div></div>
+    </div>
+    <div class="service-card">
+      <img class="service-card-img" src="https://images.unsplash.com/photo-1522338242992-e1a54906a8da?w=400&q=80" alt="Hair Spa" loading="lazy"/>
+      <div class="service-card-body"><div class="service-card-name">Hair Spa</div><div class="service-card-count">76 salons</div></div>
+    </div>
+    <div class="service-card">
+      <img class="service-card-img" src="https://images.unsplash.com/photo-1544161515-4ab6ce6db874?w=400&q=80" alt="Massage & Spa" loading="lazy"/>
+      <div class="service-card-body"><div class="service-card-name">Massage & Spa</div><div class="service-card-count">52 salons</div></div>
+    </div>
+    <div class="service-card">
+      <img class="service-card-img" src="https://images.unsplash.com/photo-1562322140-8baeececf3df?w=400&q=80" alt="Hair Colour" loading="lazy"/>
+      <div class="service-card-body"><div class="service-card-name">Hair Colour</div><div class="service-card-count">130 salons</div></div>
+    </div>
+    <div class="service-card">
+      <img class="service-card-img" src="https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?w=400&q=80" alt="Waxing & Threading" loading="lazy"/>
+      <div class="service-card-body"><div class="service-card-name">Waxing & Threading</div><div class="service-card-count">160 salons</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ── FEATURED SALONS ── -->
+<section class="section featured" id="salons">
+  <div class="section-header reveal">
+    <div class="section-label">Handpicked for you</div>
+    <h2 class="section-title">Top Salons in Chennai</h2>
+    <p class="section-sub">Verified, highly-rated salons trusted by thousands of Chennai customers</p>
+  </div>
+  <div class="salons-carousel reveal" id="salonsGrid"></div>
+</section>
+
+<!-- ── AREAS ── -->
+<section class="areas" id="areas">
+  <div class="section-header reveal">
+    <div class="section-label">Explore by neighbourhood</div>
+    <h2 class="section-title" style="color:var(--white)">Salons Near You</h2>
+  </div>
+  <div class="areas-grid reveal">
+    <div class="area-card"><div class="area-icon">🏙️</div><div class="area-name">T.Nagar</div><div class="area-count">42 salons</div></div>
+    <div class="area-card"><div class="area-icon">🌳</div><div class="area-name">Anna Nagar</div><div class="area-count">35 salons</div></div>
+    <div class="area-card"><div class="area-icon">💼</div><div class="area-name">Velachery</div><div class="area-count">28 salons</div></div>
+    <div class="area-card"><div class="area-icon">🏗️</div><div class="area-name">OMR</div><div class="area-count">31 salons</div></div>
+    <div class="area-card"><div class="area-icon">🎭</div><div class="area-name">Nungambakkam</div><div class="area-count">24 salons</div></div>
+    <div class="area-card"><div class="area-icon">🏖️</div><div class="area-name">Adyar</div><div class="area-count">22 salons</div></div>
+    <div class="area-card"><div class="area-icon">🕌</div><div class="area-name">Mylapore</div><div class="area-count">19 salons</div></div>
+    <div class="area-card"><div class="area-icon">🌇</div><div class="area-name">Porur</div><div class="area-count">17 salons</div></div>
+  </div>
+</section>
+
+<!-- ── HOW IT WORKS ── -->
+<section class="section how">
+  <div class="section-header reveal">
+    <div class="section-label">Simple as 1-2-3</div>
+    <h2 class="section-title">How StyleSync Works</h2>
+  </div>
+  <div class="how-steps reveal">
+    <div class="how-step">
+      <div class="how-step-num">1</div>
+      <div class="how-step-icon">🔍</div>
+      <h4>Search & Discover</h4>
+      <p>Browse salons by area, service or rating. Filter to find your perfect match.</p>
+    </div>
+    <div class="how-step">
+      <div class="how-step-num">2</div>
+      <div class="how-step-icon">🗓️</div>
+      <h4>Pick a Slot</h4>
+      <p>See real-time availability and choose a time that works for you.</p>
+    </div>
+    <div class="how-step">
+      <div class="how-step-num">3</div>
+      <div class="how-step-icon">📲</div>
+      <h4>Book Instantly</h4>
+      <p>Confirm your booking in seconds. Get a WhatsApp confirmation immediately.</p>
+    </div>
+    <div class="how-step">
+      <div class="how-step-num">4</div>
+      <div class="how-step-icon">✨</div>
+      <h4>Glow Up!</h4>
+      <p>Walk in, get pampered, and leave looking absolutely stunning.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ── AI FEATURE ── -->
+<section class="ai-section" id="ai">
+  <div class="ai-inner reveal">
+    <div>
+      <div class="ai-badge">✦ AI-Powered</div>
+      <h2 class="ai-title">Not sure what<br/><em>look suits you?</em></h2>
+      <p class="ai-desc">
+        Meet your personal AI Style Advisor. Answer a few fun questions about your lifestyle,
+        occasion, and preferences — and get a personalised salon recommendation
+        matched to your unique vibe.
+      </p>
+      <div class="ai-features">
+        <div class="ai-feat"><div class="ai-feat-icon">💬</div> Personalised style quiz — 5 quick questions</div>
+        <div class="ai-feat"><div class="ai-feat-icon">✨</div> AI recommends the perfect look & service</div>
+        <div class="ai-feat"><div class="ai-feat-icon">📍</div> Matched to top-rated salons near you</div>
+        <div class="ai-feat"><div class="ai-feat-icon">⚡</div> Instant booking from recommendation</div>
+      </div>
+      <button class="ai-cta-btn" onclick="startQuiz()">Try AI Style Quiz →</button>
+    </div>
+
+    <div class="ai-quiz-card" id="quizCard">
+      <h4>✦ What's the occasion?</h4>
+      <div class="quiz-option" onclick="selectOption(this)"><span>👰</span> Wedding / Bridal</div>
+      <div class="quiz-option" onclick="selectOption(this)"><span>🎉</span> Party / Special event</div>
+      <div class="quiz-option" onclick="selectOption(this)"><span>💼</span> Office / Professional</div>
+      <div class="quiz-option active" onclick="selectOption(this)"><span>😊</span> Everyday refresh</div>
+      <button class="quiz-next" onclick="nextQuizStep()">Next Question →</button>
+    </div>
+  </div>
+</section>
+
+<!-- ── TESTIMONIALS ── -->
+<section class="section testimonials">
+  <div class="section-header reveal">
+    <div class="section-label">Chennai girls love it</div>
+    <h2 class="section-title">Real Reviews, Real Glow</h2>
+  </div>
+  <div class="testimonials-grid reveal">
+    <div class="testi-card">
+      <div class="testi-quote">"</div>
+      <p class="testi-text">Booked a bridal package at Glam Studio through StyleSync. The process was super easy and the salon was exactly as described. My wedding day look was absolutely stunning!</p>
+      <div class="testi-author">
+        <div class="testi-avatar">P</div>
+        <div><div class="testi-name">Priya Rajan</div><div class="testi-area">T.Nagar</div></div>
+        <div class="testi-stars">★★★★★</div>
+      </div>
+    </div>
+    <div class="testi-card">
+      <div class="testi-quote">"</div>
+      <p class="testi-text">The AI Style Quiz suggested a keratin treatment I had never considered. Tried it at Naturals in Anna Nagar — completely transformed my hair! StyleSync understands us.</p>
+      <div class="testi-author">
+        <div class="testi-avatar">A</div>
+        <div><div class="testi-name">Ananya Krishnan</div><div class="testi-area">Anna Nagar</div></div>
+        <div class="testi-stars">★★★★★</div>
+      </div>
+    </div>
+    <div class="testi-card">
+      <div class="testi-quote">"</div>
+      <p class="testi-text">Finally a platform that gets Chennai salons! Lakme Velachery on weekends is tough to book — StyleSync showed me open slots I didn't even know existed. 10/10!</p>
+      <div class="testi-author">
+        <div class="testi-avatar">D</div>
+        <div><div class="testi-name">Deepa Suresh</div><div class="testi-area">Velachery</div></div>
+        <div class="testi-stars">★★★★★</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── CTA ── -->
+<section class="download-cta" id="book">
+  <div class="download-inner reveal">
+    <div class="section-label">Ready to glow?</div>
+    <h2 class="section-title">Your Perfect Salon is<br/>One Click Away</h2>
+    <p>Join 15,000+ Chennai women who trust StyleSync for every occasion — big or small.</p>
+    <div class="cta-btns">
+      <button class="cta-primary" onclick="alert('Booking page — coming soon!')">Book Your Appointment</button>
+      <button class="cta-secondary" onclick="alert('Salon listing — coming soon!')">Browse All Salons</button>
+    </div>
+  </div>
+</section>
+
+<!-- ── FOOTER ── -->
+<footer>
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <div class="nav-logo" style="color:var(--cream)">
+        <div class="nav-logo-icon">✦</div>
+        Style<span style="color:var(--rose-lt)">Sync</span>
+      </div>
+      <p>Chennai's most loved beauty salon marketplace. Discover, book, and glow — all in one place.</p>
+      <div style="margin-top:20px;display:flex;gap:12px;">
+        <a href="#" style="color:var(--rose-lt);font-size:1.2rem;">📷</a>
+        <a href="#" style="color:var(--rose-lt);font-size:1.2rem;">🐦</a>
+        <a href="#" style="color:var(--rose-lt);font-size:1.2rem;">💼</a>
+      </div>
+    </div>
+    <div class="footer-col">
+      <h5>Explore</h5>
+      <ul>
+        <li><a href="#">Find Salons</a></li>
+        <li><a href="#">Top Rated</a></li>
+        <li><a href="#">New Arrivals</a></li>
+        <li><a href="#">Offers</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h5>Services</h5>
+      <ul>
+        <li><a href="#">Bridal Packages</a></li>
+        <li><a href="#">Hair Treatments</a></li>
+        <li><a href="#">Skin & Facial</a></li>
+        <li><a href="#">Nail Art</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h5>Company</h5>
+      <ul>
+        <li><a href="#">About Us</a></li>
+        <li><a href="#">List Your Salon</a></li>
+        <li><a href="#">Blog</a></li>
+        <li><a href="#">Contact</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div>© 2026 <span>StyleSync</span>. Made with ❤️ for Chennai.</div>
+    <div style="text-align:center;color:rgba(255,248,240,0.45);font-size:0.75rem;">Designed & Built by <span style="color:var(--rose-lt);font-weight:600;">Parvathavarthini</span></div>
+    <div>Privacy · Terms · Cookies</div>
+  </div>
+</footer>
+
+<script>
+/* ─ DATA ─ */
+const salons = [
+  { id:1, name:"Glam Studio",     area:"T.Nagar",        rating:4.8, reviews:320, services:["Haircut","Bridal","Facial"],        price:"₹499",  img:"https://images.unsplash.com/photo-1633681926022-84c23e8cb2d6?w=600&q=80", tag:"Most Popular" },
+  { id:2, name:"Naturals Salon",  area:"Anna Nagar",     rating:4.6, reviews:210, services:["Hair","Skin","Nail Art"],            price:"₹350",  img:"https://images.unsplash.com/photo-1521590832167-7bcbfaa6381f?w=600&q=80", tag:"Best Value" },
+  { id:3, name:"Lakmé Salon",     area:"Velachery",      rating:4.7, reviews:280, services:["All Services","Bridal","Skin"],      price:"₹599",  img:"https://images.unsplash.com/photo-1487412947147-5cebf100ffc2?w=600&q=80", tag:"Premium" },
+  { id:4, name:"Green Trends",    area:"OMR",            rating:4.5, reviews:175, services:["Hair","Spa","Relaxation"],           price:"₹399",  img:"https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?w=600&q=80", tag:"Trending" },
+  { id:5, name:"Toni & Guy",      area:"Nungambakkam",   rating:4.9, reviews:390, services:["Premium Hair","Colour","Treatment"], price:"₹1200", img:"https://images.unsplash.com/photo-1595476108010-b4d1f102b1b1?w=600&q=80", tag:"Top Rated" },
+  { id:6, name:"Enrich Salon",    area:"Adyar",          rating:4.6, reviews:198, services:["Facial","Waxing","Nail Art"],        price:"₹450",  img:"https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?w=600&q=80", tag:"New" },
+];
+
+function renderSalons(data) {
+  const grid = document.getElementById('salonsGrid');
+  grid.innerHTML = data.map(s => `
+    <div class="salon-card" onclick="alert('Opening ${s.name} — Salon Detail page coming soon!')">
+      <div class="salon-card-img">
+        <img class="salon-card-img-inner" src="${s.img}" alt="${s.name}" loading="lazy" onerror="this.style.background='linear-gradient(135deg,#E8C4A8,#6B2E61)';this.style.opacity='0.5'"/>
+        <div class="salon-tag">${s.tag}</div>
+        <button class="salon-fav" onclick="event.stopPropagation();this.textContent=this.textContent==='🤍'?'❤️':'🤍'">🤍</button>
+      </div>
+      <div class="salon-card-body">
+        <div class="salon-card-top">
+          <div class="salon-card-name">${s.name}</div>
+          <div class="salon-rating">⭐ ${s.rating}</div>
+        </div>
+        <div class="salon-card-area">📍 ${s.area} &nbsp;·&nbsp; ${s.reviews} reviews</div>
+        <div class="salon-tags">${s.services.map(sv=>`<span class="stag">${sv}</span>`).join('')}</div>
+        <div class="salon-card-foot">
+          <div class="salon-price">From <strong>${s.price}</strong></div>
+          <button class="salon-book-btn">Book Now</button>
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+renderSalons(salons);
+
+/* ─ SEARCH ─ */
+function setSearch(val) {
+  document.getElementById('heroSearch').value = val;
+  document.getElementById('heroSearch').focus();
+}
+function handleSearch() {
+  const q = document.getElementById('heroSearch').value.toLowerCase().trim();
+  if (!q) { renderSalons(salons); return; }
+  const filtered = salons.filter(s =>
+    s.name.toLowerCase().includes(q) ||
+    s.area.toLowerCase().includes(q) ||
+    s.services.some(sv => sv.toLowerCase().includes(q))
+  );
+  renderSalons(filtered.length ? filtered : salons);
+  if (filtered.length) document.getElementById('salons').scrollIntoView({behavior:'smooth'});
+}
+document.getElementById('heroSearch').addEventListener('keydown', e => { if (e.key==='Enter') handleSearch(); });
+
+/* ─ SCROLL NAV ─ */
+window.addEventListener('scroll', () => {
+  document.getElementById('nav').classList.toggle('scrolled', window.scrollY > 40);
+});
+
+/* ─ REVEAL ON SCROLL ─ */
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.12 });
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+/* ─ QUIZ ─ */
+function selectOption(el) {
+  el.closest('.ai-quiz-card').querySelectorAll('.quiz-option').forEach(o => o.classList.remove('active'));
+  el.classList.add('active');
+}
+const quizSteps = [
+  { q:"✦ What's the occasion?", opts:[["👰","Wedding / Bridal"],["🎉","Party / Special event"],["💼","Office / Professional"],["😊","Everyday refresh"]] },
+  { q:"✦ Your hair type?",      opts:[["🌊","Wavy & flowing"],["🔁","Curly & textured"],["📏","Straight & sleek"],["💫","Fine & delicate"]] },
+  { q:"✦ Time you have?",       opts:[["⚡","Under 30 mins"],["🕐","1–2 hours"],["🕰️","Half day is fine"],["🌸","Full pamper day!"]] },
+  { q:"✦ Budget range?",        opts:[["💰","Under ₹500"],["💳","₹500–₹1500"],["👑","₹1500–₹3000"],["✨","No limit, best only!"]] },
+];
+let quizStep = 0;
+
+function nextQuizStep() {
+  quizStep = (quizStep + 1) % quizSteps.length;
+  if (quizStep === 0) {
+    showRecommendation(); return;
+  }
+  const s = quizSteps[quizStep];
+  const card = document.getElementById('quizCard');
+  card.innerHTML = `
+    <h4>${s.q}</h4>
+    ${s.opts.map(o => `<div class="quiz-option" onclick="selectOption(this)"><span>${o[0]}</span> ${o[1]}</div>`).join('')}
+    <button class="quiz-next" onclick="nextQuizStep()">Next →</button>
+  `;
+}
+
+function showRecommendation() {
+  const card = document.getElementById('quizCard');
+  card.innerHTML = `
+    <h4>✦ Your AI Recommendation</h4>
+    <div style="background:rgba(201,149,108,0.15);border:1px solid rgba(201,149,108,0.3);border-radius:12px;padding:16px;margin:12px 0;">
+      <div style="font-size:1.4rem;margin-bottom:6px;">💫</div>
+      <div style="color:var(--white);font-weight:600;margin-bottom:4px;">Glam Studio — T.Nagar</div>
+      <div style="font-size:0.8rem;color:rgba(255,248,240,0.7);">Recommended: <strong style="color:var(--rose-lt);">Party Makeup + Hair Style</strong></div>
+      <div style="font-size:0.78rem;color:rgba(255,248,240,0.6);margin-top:6px;">⭐ 4.8 · From ₹1,200 · Next slot: 3:00 PM today</div>
+    </div>
+    <button class="quiz-next" onclick="alert('Booking this recommendation!')">Book This Salon →</button>
+    <button onclick="quizStep=0;nextQuizStep()" style="width:100%;background:none;color:rgba(255,248,240,0.5);font-size:0.8rem;margin-top:10px;text-decoration:underline;cursor:pointer;">Retake quiz</button>
+  `;
+  quizStep = 0;
+}
+
+function startQuiz() {
+  quizStep = 0;
+  document.getElementById('ai').scrollIntoView({ behavior:'smooth' });
+  setTimeout(nextQuizStep, 500);
+}
+</script>
+</body>
+</html>
