@@ -35,12 +35,13 @@ img{display:block;max-width:100%}
 .nav-logo{display:flex;align-items:center;gap:9px;font-family:var(--font-display);font-size:1.4rem;font-weight:700;color:var(--plum)}
 .nav-logo span{color:var(--rose)}
 .nav-logo-icon{width:34px;height:34px;background:linear-gradient(135deg,var(--rose),var(--plum));border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:1rem}
-.nav-links{display:flex;align-items:center;gap:28px;font-size:0.85rem;font-weight:500;color:var(--muted)}
+.nav-links{display:flex;align-items:center;gap:28px;font-size:0.85rem;font-weight:500;color:var(--muted);list-style:none}
 .nav-links a:hover{color:var(--plum)}
 .nav-cta{background:var(--plum);color:var(--white);padding:9px 20px;border-radius:99px;font-size:0.85rem;font-weight:500;transition:background 0.2s}
 .nav-cta:hover{background:var(--plum-lt)}
+.nav-mobile-btn{display:none;background:none;border:none;font-size:1.5rem;color:var(--plum);cursor:pointer;padding:4px}
 
-/* HERO GALLERY */
+/* GALLERY */
 .gallery{margin-top:66px;display:grid;grid-template-columns:2fr 1fr 1fr;grid-template-rows:280px 280px;gap:6px;height:560px;overflow:hidden}
 .gallery-main{grid-row:1/3;grid-column:1/2;position:relative;overflow:hidden;cursor:pointer}
 .gallery-thumb{position:relative;overflow:hidden;cursor:pointer}
@@ -52,9 +53,6 @@ img{display:block;max-width:100%}
 
 /* MAIN LAYOUT */
 .detail-layout{display:grid;grid-template-columns:1fr 360px;gap:40px;padding:40px 5% 80px;max-width:1300px;margin:0 auto}
-
-/* LEFT CONTENT */
-.detail-left{}
 
 /* SALON HEADER */
 .salon-header{margin-bottom:28px}
@@ -148,14 +146,161 @@ img{display:block;max-width:100%}
 .rev-text{font-size:0.85rem;color:var(--muted);line-height:1.7}
 .rev-service{display:inline-block;background:rgba(74,25,66,0.07);color:var(--plum);font-size:0.68rem;font-weight:600;padding:2px 8px;border-radius:99px;margin-top:6px}
 
-/* MAP */
-.map-placeholder{height:180px;background:linear-gradient(135deg,var(--plum-dk),var(--plum));border-radius:14px;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:8px;cursor:pointer;transition:opacity 0.2s}
-.map-placeholder:hover{opacity:0.9}
-.map-placeholder span{font-size:2rem}
-.map-placeholder p{color:rgba(255,248,240,0.8);font-size:0.82rem}
-.map-address{font-size:0.82rem;color:var(--muted);margin-top:12px;display:flex;gap:6px;align-items:flex-start}
+/* ═══ LOCATION CARD — FIXED ═══ */
+.location-card{
+  border-radius:16px;
+  overflow:hidden;
+  border:1px solid var(--border);
+  margin-bottom:16px;
+}
+.location-map-visual{
+  background:linear-gradient(135deg,var(--plum-dk) 0%,var(--plum) 50%,var(--plum-lt) 100%);
+  height:180px;
+  position:relative;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  overflow:hidden;
+}
+/* decorative map-like grid lines */
+.location-map-visual::before{
+  content:'';
+  position:absolute;
+  inset:0;
+  background-image:
+    linear-gradient(rgba(255,248,240,0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,248,240,0.06) 1px, transparent 1px);
+  background-size:28px 28px;
+}
+/* decorative road lines */
+.location-map-visual::after{
+  content:'';
+  position:absolute;
+  inset:0;
+  background-image:
+    linear-gradient(rgba(255,248,240,0.12) 2px, transparent 2px),
+    linear-gradient(90deg, rgba(255,248,240,0.12) 2px, transparent 2px);
+  background-size:84px 84px;
+}
+.map-pin-container{
+  position:relative;
+  z-index:2;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:8px;
+}
+.map-pin{
+  width:48px;height:48px;
+  background:linear-gradient(135deg,var(--rose),var(--rose-dk));
+  border-radius:50% 50% 50% 0;
+  transform:rotate(-45deg);
+  box-shadow:0 4px 20px rgba(201,149,108,0.5);
+  display:flex;align-items:center;justify-content:center;
+  animation:pinBounce 2s ease-in-out infinite;
+}
+.map-pin-inner{
+  transform:rotate(45deg);
+  font-size:1.2rem;
+}
+@keyframes pinBounce{
+  0%,100%{transform:rotate(-45deg) translateY(0)}
+  50%{transform:rotate(-45deg) translateY(-6px)}
+}
+.map-label{
+  background:rgba(255,248,240,0.95);
+  color:var(--plum);
+  font-size:0.72rem;
+  font-weight:700;
+  padding:5px 12px;
+  border-radius:99px;
+  letter-spacing:0.04em;
+  white-space:nowrap;
+  box-shadow:0 2px 12px rgba(74,25,66,0.2);
+}
+/* pulse circle */
+.map-pin-container::before{
+  content:'';
+  position:absolute;
+  top:-6px;left:-6px;
+  width:60px;height:60px;
+  border-radius:50%;
+  background:rgba(201,149,108,0.2);
+  animation:pulse 2s ease-in-out infinite;
+}
+@keyframes pulse{
+  0%,100%{transform:scale(0.9);opacity:0.5}
+  50%{transform:scale(1.3);opacity:0}
+}
+.location-info{
+  background:var(--white);
+  padding:16px 20px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  flex-wrap:wrap;
+}
+.location-address-block{
+  display:flex;
+  align-items:flex-start;
+  gap:10px;
+  flex:1;
+}
+.location-pin-icon{
+  width:32px;height:32px;
+  background:rgba(201,149,108,0.12);
+  border-radius:8px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:1rem;
+  flex-shrink:0;
+}
+.location-address-text{
+  font-size:0.82rem;
+  color:var(--text);
+  line-height:1.6;
+  font-weight:500;
+}
+.location-area{
+  font-size:0.72rem;
+  color:var(--muted);
+  margin-top:2px;
+}
+.maps-btn{
+  display:flex;
+  align-items:center;
+  gap:6px;
+  background:var(--plum);
+  color:var(--white);
+  padding:9px 16px;
+  border-radius:99px;
+  font-size:0.78rem;
+  font-weight:600;
+  transition:all 0.2s;
+  white-space:nowrap;
+  flex-shrink:0;
+}
+.maps-btn:hover{
+  background:var(--plum-lt);
+  transform:translateY(-1px);
+}
+.location-chips{
+  display:flex;
+  gap:6px;
+  flex-wrap:wrap;
+  padding:0 20px 16px;
+  background:var(--white);
+}
+.loc-chip{
+  font-size:0.7rem;
+  color:var(--muted);
+  background:var(--cream);
+  padding:4px 10px;
+  border-radius:99px;
+  border:1px solid var(--border);
+}
 
-/* RIGHT STICKY BOOKING CARD */
+/* BOOKING CARD */
 .booking-card{position:sticky;top:86px;background:var(--white);border-radius:24px;border:1px solid var(--border);box-shadow:var(--shadow-lg);overflow:hidden}
 .booking-card-header{background:linear-gradient(135deg,var(--plum),var(--plum-lt));padding:24px;position:relative;overflow:hidden}
 .booking-card-header::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 80% 0%,rgba(201,149,108,0.25) 0%,transparent 60%);pointer-events:none}
@@ -167,8 +312,6 @@ img{display:block;max-width:100%}
 .bc-rating-text{font-size:0.78rem;color:rgba(255,248,240,0.65)}
 .booking-card-body{padding:20px}
 .bc-section-title{font-size:0.72rem;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);margin-bottom:10px}
-
-/* selected services in booking card */
 .bc-selected{margin-bottom:16px;min-height:40px}
 .bc-svc-item{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--border);font-size:0.82rem}
 .bc-svc-item:last-child{border-bottom:none}
@@ -177,8 +320,6 @@ img{display:block;max-width:100%}
 .bc-svc-remove{color:var(--muted);font-size:0.8rem;cursor:pointer;background:none;border:none;padding:0 4px;transition:color 0.15s}
 .bc-svc-remove:hover{color:#E87090}
 .bc-empty{font-size:0.8rem;color:var(--muted);text-align:center;padding:12px 0;font-style:italic}
-
-/* date mini in booking card */
 .bc-date-row{display:flex;gap:6px;margin-bottom:12px;overflow-x:auto}
 .bc-date-mini{flex-shrink:0;padding:7px 12px;border-radius:10px;border:1.5px solid var(--border);cursor:pointer;background:var(--cream);transition:all 0.15s;text-align:center}
 .bc-date-mini.active{background:var(--plum);border-color:var(--plum)}
@@ -189,12 +330,9 @@ img{display:block;max-width:100%}
 .bc-time{padding:7px 4px;border-radius:8px;border:1.5px solid var(--border);text-align:center;font-size:0.72rem;font-weight:600;color:var(--plum);cursor:pointer;background:var(--cream);transition:all 0.15s}
 .bc-time:hover,.bc-time.active{background:var(--plum);color:var(--white);border-color:var(--plum)}
 .bc-time.na{opacity:0.3;cursor:not-allowed}
-
-/* total row */
 .bc-total{display:flex;justify-content:space-between;align-items:center;padding:14px 0;border-top:1px solid var(--border);margin-bottom:14px}
 .bc-total-label{font-size:0.85rem;font-weight:600;color:var(--plum)}
 .bc-total-val{font-family:var(--font-display);font-size:1.2rem;font-weight:800;color:var(--rose-dk)}
-
 .book-now-btn{width:100%;background:linear-gradient(135deg,var(--plum),var(--plum-lt));color:var(--white);padding:15px;border-radius:99px;font-size:0.95rem;font-weight:700;transition:all 0.2s;box-shadow:0 4px 20px rgba(74,25,66,0.3)}
 .book-now-btn:hover{transform:translateY(-2px);box-shadow:0 8px 28px rgba(74,25,66,0.4)}
 .book-now-btn:disabled{opacity:0.5;cursor:not-allowed;transform:none}
@@ -214,7 +352,7 @@ img{display:block;max-width:100%}
 .mobile-book-bar{display:none;position:fixed;bottom:0;left:0;right:0;z-index:80;background:var(--white);border-top:1px solid var(--border);padding:12px 5%;box-shadow:0 -4px 20px rgba(74,25,66,0.1);align-items:center;justify-content:space-between;gap:12px}
 .mb-price{font-family:var(--font-display);font-size:1.3rem;font-weight:800;color:var(--plum)}
 .mb-price span{font-size:0.78rem;font-weight:400;color:var(--muted)}
-.mb-book{background:linear-gradient(135deg,var(--plum),var(--plum-lt));color:var(--white);padding:12px 28px;border-radius:99px;font-size:0.88rem;font-weight:700;flex-shrink:0}
+.mb-book{background:linear-gradient(135deg,var(--plum),var(--plum-lt));color:var(--white);padding:12px 28px;border-radius:99px;font-size:0.88rem;font-weight:700;flex-shrink:0;border:none;cursor:pointer}
 
 /* ANIMATIONS */
 @keyframes fadeUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
@@ -233,39 +371,185 @@ img{display:block;max-width:100%}
 }
 @media(max-width:600px){
   .nav-links{display:none}
-.nav-links.mobile-open {
-  display: flex !important;
-  flex-direction: column;
-  align-items: flex-start;
-  position: fixed;
-  top: 70px; left: 0; right: 0;
-  background: rgba(255,248,240,0.98);
-  backdrop-filter: blur(18px);
-  border-bottom: 1px solid var(--border);
-  padding: 16px 5% 24px;
-  box-shadow: var(--shadow-md);
-  z-index: 99;
-  gap: 0;
-}
-.nav-links.mobile-open li,
-.nav-links.mobile-open a {
-  width: 100%;
-  padding: 12px 0;
-  font-size: 1rem;
-  color: var(--plum);
-  border-bottom: 1px solid var(--border);
-}
-.nav-links.mobile-open .nav-cta {
-  margin-top: 16px;
-  text-align: center;
-  border-bottom: none;
-}
-.nav-mobile-btn { display: block; }
+  .nav-mobile-btn{display:block}
+  .nav-links.mobile-open{
+    display:flex !important;
+    flex-direction:column;
+    align-items:flex-start;
+    position:fixed;
+    top:66px;left:0;right:0;
+    background:rgba(255,248,240,0.98);
+    backdrop-filter:blur(18px);
+    border-bottom:1px solid var(--border);
+    padding:16px 5% 24px;
+    box-shadow:var(--shadow-md);
+    z-index:99;
+    gap:0;
+    list-style:none;
+  }
+  .nav-links.mobile-open li,
+  .nav-links.mobile-open a{
+    width:100%;
+    padding:12px 0;
+    font-size:1rem;
+    color:var(--plum);
+    border-bottom:1px solid var(--border);
+  }
+  .nav-links.mobile-open .nav-cta{
+    margin-top:16px;
+    text-align:center;
+    border-bottom:none;
+    display:block;
+  }
   .gallery{grid-template-columns:1fr;grid-template-rows:220px;height:220px}
   .gallery-thumb{display:none}
   .about-highlights{grid-template-columns:repeat(3,1fr)}
   .similar-grid{grid-template-columns:repeat(2,1fr)}
   .time-slots{grid-template-columns:repeat(3,1fr)}
+  .location-info{flex-direction:column;align-items:flex-start}
+  .maps-btn{width:100%;justify-content:center}
+}
+/* ===== MOBILE FIX ===== */
+
+html,
+body{
+    width:100%;
+    max-width:100%;
+    overflow-x:hidden;
+}
+
+*{
+    box-sizing:border-box;
+}
+
+img{
+    max-width:100%;
+    height:auto;
+}
+
+/* Tablet */
+@media screen and (max-width:960px){
+
+    .detail-layout{
+        display:block;
+        width:100%;
+        padding:20px;
+    }
+
+    .detail-left,
+    .detail-right{
+        width:100%;
+    }
+
+    .booking-card{
+        display:none;
+    }
+
+    .mobile-book-bar{
+        display:flex;
+    }
+
+    .gallery{
+        grid-template-columns:1fr 1fr;
+        grid-template-rows:220px 220px;
+        height:auto;
+    }
+
+    .gallery-main{
+        grid-column:1/3;
+        grid-row:1/2;
+    }
+
+    .time-slots{
+        grid-template-columns:repeat(3,1fr);
+    }
+}
+
+/* Mobile */
+@media screen and (max-width:600px){
+
+    .nav{
+        padding:0 15px;
+    }
+
+    .nav-links{
+        display:none;
+    }
+
+    .nav-mobile-btn{
+        display:block;
+    }
+
+    .gallery{
+        width:100%;
+        grid-template-columns:1fr;
+        grid-template-rows:220px;
+        height:220px;
+    }
+
+    .gallery-thumb{
+        display:none;
+    }
+
+    .gallery-main{
+        grid-column:auto;
+        grid-row:auto;
+    }
+
+    .detail-layout{
+        width:100%;
+        padding:15px;
+    }
+
+    .detail-card{
+        width:100%;
+        padding:16px;
+        overflow:hidden;
+    }
+
+    .salon-name{
+        font-size:1.8rem;
+    }
+
+    .salon-meta{
+        flex-direction:column;
+        align-items:flex-start;
+    }
+
+    .about-highlights{
+        grid-template-columns:1fr;
+    }
+
+    .similar-grid{
+        grid-template-columns:1fr;
+    }
+
+    .reviews-summary{
+        flex-direction:column;
+        text-align:center;
+    }
+
+    .time-slots{
+        grid-template-columns:repeat(2,1fr);
+    }
+
+    .location-info{
+        flex-direction:column;
+        align-items:flex-start;
+    }
+
+    .maps-btn{
+        width:100%;
+        justify-content:center;
+    }
+
+    .action-row{
+        flex-wrap:wrap;
+    }
+
+    .action-btn{
+        flex:1 1 calc(50% - 10px);
+    }
 }
 </style>
 </head>
@@ -273,17 +557,17 @@ img{display:block;max-width:100%}
 
 <!-- NAV -->
 <nav class="nav">
-  <a href="stylesync-home.html" class="nav-logo">
+  <a href="index.html" class="nav-logo">
     <div class="nav-logo-icon">✦</div>
     Style<span>Sync</span>
   </a>
-  <ul class="nav-links">
+  <ul class="nav-links" id="navLinks">
     <li><a href="index.html">Home</a></li>
     <li><a href="stylesync-listing.html">Salons</a></li>
     <li><a href="stylesync-quiz.html">AI Stylist</a></li>
-    <a href="#book" class="nav-cta">Book Now</a>
+    <li><a href="#book" class="nav-cta">Book Now</a></li>
   </ul>
-  <button class="nav-mobile-btn" onclick="document.querySelector('.nav-links').classList.toggle('mobile-open');this.textContent=this.textContent==='☰'?'✕':'☰'">☰</button>
+  <button class="nav-mobile-btn" id="menuBtn" onclick="toggleMenu()" aria-label="Menu">☰</button>
 </nav>
 
 <!-- GALLERY -->
@@ -311,7 +595,6 @@ img{display:block;max-width:100%}
 
 <!-- MAIN LAYOUT -->
 <div class="detail-layout">
-
   <!-- LEFT -->
   <div class="detail-left">
 
@@ -355,7 +638,7 @@ img{display:block;max-width:100%}
       <p class="about-text">Glam Studio is Chennai's most-loved premium beauty salon, nestled in the heart of T.Nagar. With over 8 years of excellence, we specialise in bridal transformations, hair treatments, and luxury skincare. Our team of 12 certified stylists use international-grade products to deliver results you'll love. Walk-ins welcome, appointments preferred.</p>
       <div class="about-highlights">
         <div class="about-hl">
-          <div class="about-hl-icon">💇‍♀️</div>
+          <div class="about-hl-icon">💇</div>
           <div class="about-hl-val">12</div>
           <div class="about-hl-label">Expert Stylists</div>
         </div>
@@ -442,29 +725,49 @@ img{display:block;max-width:100%}
       </div>
     </div>
 
-    <!-- LOCATION -->
+    <!-- LOCATION — FIXED ✨ -->
     <div class="detail-card fade-up">
       <div class="detail-card-title">📍 Location</div>
-      <div class="map-placeholder" onclick="alert('Maps integration — coming soon!')">
-        <span>🗺️</span>
-        <p>View on Google Maps</p>
+      <div class="location-card">
+        <div class="location-map-visual">
+          <div class="map-pin-container">
+            <div class="map-pin"><div class="map-pin-inner">💇</div></div>
+            <div class="map-label">Glam Studio · T.Nagar</div>
+          </div>
+        </div>
+        <div class="location-info">
+          <div class="location-address-block">
+            <div class="location-pin-icon">📍</div>
+            <div>
+              <div class="location-address-text">No. 42, Usman Road, T.Nagar</div>
+              <div class="location-area">Chennai – 600017 · Near Saravana Stores</div>
+            </div>
+          </div>
+          <a href="https://maps.google.com/?q=T.Nagar+Chennai" target="_blank" class="maps-btn">
+            🗺 Open in Maps
+          </a>
+        </div>
+        <div class="location-chips">
+          <span class="loc-chip">🚇 3 min from T.Nagar Metro</span>
+          <span class="loc-chip">🅿️ Parking available</span>
+          <span class="loc-chip">🚌 Bus stop nearby</span>
+        </div>
       </div>
-      <div class="map-address">📍 <span>No. 42, Usman Road, T.Nagar, Chennai – 600017. Near Saravana Stores.</span></div>
     </div>
 
     <!-- SIMILAR SALONS -->
     <div class="detail-card fade-up">
       <div class="detail-card-title">✦ Similar Salons Nearby</div>
       <div class="similar-grid">
-        <div class="sim-card" onclick="alert('Naturals Salon detail — coming soon!')">
+        <div class="sim-card" onclick="alert('Naturals Salon — coming soon!')">
           <div class="sim-img" style="background:linear-gradient(135deg,#B8E6C9,#4A9E6B)">🌿</div>
           <div class="sim-body"><div class="sim-name">Naturals Salon</div><div class="sim-area">Anna Nagar</div><div class="sim-rating">⭐ 4.6</div></div>
         </div>
-        <div class="sim-card" onclick="alert('Lakmé Salon detail — coming soon!')">
+        <div class="sim-card" onclick="alert('Lakmé Salon — coming soon!')">
           <div class="sim-img" style="background:linear-gradient(135deg,#E8C4A8,#C9956C)">✨</div>
           <div class="sim-body"><div class="sim-name">Lakmé Salon</div><div class="sim-area">Velachery</div><div class="sim-rating">⭐ 4.7</div></div>
         </div>
-        <div class="sim-card" onclick="alert('Enrich Salon detail — coming soon!')">
+        <div class="sim-card" onclick="alert('Enrich Salon — coming soon!')">
           <div class="sim-img" style="background:linear-gradient(135deg,#F9CDD8,#E87090)">💅</div>
           <div class="sim-body"><div class="sim-name">Enrich Salon</div><div class="sim-area">Adyar</div><div class="sim-rating">⭐ 4.6</div></div>
         </div>
@@ -489,13 +792,10 @@ img{display:block;max-width:100%}
         <div class="bc-selected" id="bcSelected">
           <div class="bc-empty" id="bcEmpty">No services selected yet</div>
         </div>
-
         <div class="bc-section-title">Select Date</div>
         <div class="bc-date-row" id="bcDates"></div>
-
         <div class="bc-section-title">Select Time</div>
         <div class="bc-time-grid" id="bcTimes"></div>
-
         <div class="bc-total">
           <span class="bc-total-label">Total</span>
           <span class="bc-total-val" id="bcTotal">₹0</span>
@@ -510,27 +810,38 @@ img{display:block;max-width:100%}
 
 <!-- MOBILE BOTTOM BAR -->
 <div class="mobile-book-bar">
-  <div><div class="mb-price">₹499 <span>onwards</span></div><div style="font-size:0.72rem;color:var(--muted)">⭐ 4.8 · T.Nagar</div></div>
+  <div>
+    <div class="mb-price">₹499 <span>onwards</span></div>
+    <div style="font-size:0.72rem;color:var(--muted)">⭐ 4.8 · T.Nagar</div>
+  </div>
   <button class="mb-book" onclick="document.getElementById('availability-card').scrollIntoView({behavior:'smooth'})">Book Now</button>
 </div>
 
 <script>
+/* ─── NAV MENU ─── */
+function toggleMenu() {
+  const links = document.getElementById('navLinks');
+  const btn = document.getElementById('menuBtn');
+  links.classList.toggle('mobile-open');
+  btn.textContent = links.classList.contains('mobile-open') ? '✕' : '☰';
+}
+
 /* ─── SERVICES DATA ─── */
 const SERVICES = [
-  {id:1, cat:'hair',   icon:'✂️', name:'Haircut & Blow Dry',      dur:'45 min', price:499},
-  {id:2, cat:'hair',   icon:'🎨', name:'Hair Colour (Global)',     dur:'2 hrs',  price:1200},
-  {id:3, cat:'hair',   icon:'✨', name:'Keratin Treatment',        dur:'3 hrs',  price:2500},
-  {id:4, cat:'hair',   icon:'🌿', name:'Hair Spa & Deep Conditioning',dur:'1 hr',price:799},
-  {id:5, cat:'hair',   icon:'💫', name:'Highlights (Balayage)',    dur:'2.5 hrs',price:1800},
-  {id:6, cat:'skin',   icon:'🧖', name:'Gold Facial',              dur:'60 min', price:999},
-  {id:7, cat:'skin',   icon:'💆', name:'Cleanup & Detan',          dur:'45 min', price:499},
-  {id:8, cat:'skin',   icon:'🌸', name:'Whitening Facial',         dur:'75 min', price:1299},
-  {id:9, cat:'bridal', icon:'👰', name:'Full Bridal Package',      dur:'Full day',price:12000},
-  {id:10,cat:'bridal', icon:'💄', name:'Bridal Makeup (Party)',    dur:'3 hrs',  price:3500},
-  {id:11,cat:'bridal', icon:'🌺', name:'Pre-Bridal Package',       dur:'Half day',price:5999},
-  {id:12,cat:'nail',   icon:'💅', name:'Gel Nail Extensions',      dur:'1.5 hrs',price:899},
-  {id:13,cat:'nail',   icon:'🎨', name:'Nail Art (per hand)',      dur:'45 min', price:599},
-  {id:14,cat:'nail',   icon:'✨', name:'Manicure + Pedicure',      dur:'1 hr',   price:699},
+  {id:1,  cat:'hair',   icon:'✂️', name:'Haircut & Blow Dry',          dur:'45 min',   price:499},
+  {id:2,  cat:'hair',   icon:'🎨', name:'Hair Colour (Global)',         dur:'2 hrs',    price:1200},
+  {id:3,  cat:'hair',   icon:'✨', name:'Keratin Treatment',            dur:'3 hrs',    price:2500},
+  {id:4,  cat:'hair',   icon:'🌿', name:'Hair Spa & Deep Conditioning', dur:'1 hr',     price:799},
+  {id:5,  cat:'hair',   icon:'💫', name:'Highlights (Balayage)',        dur:'2.5 hrs',  price:1800},
+  {id:6,  cat:'skin',   icon:'🧖', name:'Gold Facial',                  dur:'60 min',   price:999},
+  {id:7,  cat:'skin',   icon:'💆', name:'Cleanup & Detan',              dur:'45 min',   price:499},
+  {id:8,  cat:'skin',   icon:'🌸', name:'Whitening Facial',             dur:'75 min',   price:1299},
+  {id:9,  cat:'bridal', icon:'👰', name:'Full Bridal Package',          dur:'Full day', price:12000},
+  {id:10, cat:'bridal', icon:'💄', name:'Bridal Makeup (Party)',        dur:'3 hrs',    price:3500},
+  {id:11, cat:'bridal', icon:'🌺', name:'Pre-Bridal Package',           dur:'Half day', price:5999},
+  {id:12, cat:'nail',   icon:'💅', name:'Gel Nail Extensions',          dur:'1.5 hrs',  price:899},
+  {id:13, cat:'nail',   icon:'🎨', name:'Nail Art (per hand)',          dur:'45 min',   price:599},
+  {id:14, cat:'nail',   icon:'✨', name:'Manicure + Pedicure',          dur:'1 hr',     price:699},
 ];
 
 let selectedServices = [];
@@ -545,21 +856,21 @@ function renderServices() {
   list.innerHTML = filtered.map(s => {
     const isAdded = selectedServices.find(x => x.id === s.id);
     return `
-      <div class="svc-item">
-        <div class="svc-left">
-          <div class="svc-icon-box">${s.icon}</div>
-          <div>
-            <div class="svc-name">${s.name}</div>
-            <div class="svc-dur">⏱ ${s.dur}</div>
-          </div>
+    <div class="svc-item">
+      <div class="svc-left">
+        <div class="svc-icon-box">${s.icon}</div>
+        <div>
+          <div class="svc-name">${s.name}</div>
+          <div class="svc-dur">⏱ ${s.dur}</div>
         </div>
-        <div class="svc-right">
-          <div class="svc-price">₹${s.price.toLocaleString()}</div>
-          <button class="svc-add ${isAdded ? 'added' : ''}" onclick="toggleService(${s.id})" title="${isAdded ? 'Remove' : 'Add'}">
-            ${isAdded ? '✓' : '+'}
-          </button>
-        </div>
-      </div>`;
+      </div>
+      <div class="svc-right">
+        <div class="svc-price">₹${s.price.toLocaleString()}</div>
+        <button class="svc-add ${isAdded ? 'added' : ''}" onclick="toggleService(${s.id})" title="${isAdded ? 'Remove' : 'Add'}">
+          ${isAdded ? '✓' : '+'}
+        </button>
+      </div>
+    </div>`;
   }).join('');
 }
 
@@ -580,7 +891,7 @@ function toggleService(id) {
 }
 
 /* ─── DATES ─── */
-function renderDates(containerId, activeClass) {
+function renderDates(containerId) {
   const days = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
   const today = new Date();
   let html = '';
@@ -590,26 +901,26 @@ function renderDates(containerId, activeClass) {
     const dateStr = d.toDateString();
     const isActive = selectedDate === dateStr;
     if (containerId === 'availDates') {
-      html += `<div class="date-pill ${isActive ? 'active' : ''}" onclick="setDate('${dateStr}','${containerId}')">
+      html += `<div class="date-pill ${isActive ? 'active' : ''}" onclick="setDate('${dateStr}')">
         <div class="dp-day">${label}</div><div class="dp-date">${d.getDate()}</div></div>`;
     } else {
-      html += `<div class="bc-date-mini ${isActive ? 'active' : ''}" onclick="setDate('${dateStr}','${containerId}')">
+      html += `<div class="bc-date-mini ${isActive ? 'active' : ''}" onclick="setDate('${dateStr}')">
         <div class="bdm-day">${label}</div><div class="bdm-d">${d.getDate()}</div></div>`;
     }
   }
   document.getElementById(containerId).innerHTML = html;
 }
 
-function setDate(dateStr, containerId) {
+function setDate(dateStr) {
   selectedDate = dateStr;
-  renderDates('availDates', 'active');
-  renderDates('bcDates', 'active');
+  renderDates('availDates');
+  renderDates('bcDates');
   renderTimeSlots();
 }
 
 /* ─── TIME SLOTS ─── */
 const ALL_TIMES = ['10:00','10:30','11:00','11:30','12:00','12:30','2:00','2:30','3:00','3:30','4:00','4:30','5:00','5:30','6:00','6:30','7:00','7:30'];
-const UNAVAIL   = ['11:00','12:30','3:30','5:30'];
+const UNAVAIL = ['11:00','12:30','3:30','5:30'];
 
 function renderTimeSlots() {
   ['timeSlots','bcTimes'].forEach(id => {
@@ -630,24 +941,22 @@ function setTime(t) {
   updateBookingCard();
 }
 
-/* ─── BOOKING CARD UPDATE ─── */
+/* ─── BOOKING CARD ─── */
 function updateBookingCard() {
   const container = document.getElementById('bcSelected');
-  const empty = document.getElementById('bcEmpty');
   const total = selectedServices.reduce((sum, s) => sum + s.price, 0);
   document.getElementById('bcTotal').textContent = '₹' + total.toLocaleString();
-
   if (selectedServices.length === 0) {
-    container.innerHTML = '<div class="bc-empty" id="bcEmpty">No services selected yet</div>';
+    container.innerHTML = '<div class="bc-empty">No services selected yet</div>';
   } else {
     container.innerHTML = selectedServices.map(s => `
-      <div class="bc-svc-item">
-        <span class="bc-svc-name">${s.name}</span>
-        <div style="display:flex;align-items:center;gap:6px">
-          <span class="bc-svc-price">₹${s.price.toLocaleString()}</span>
-          <button class="bc-svc-remove" onclick="toggleService(${s.id})">✕</button>
-        </div>
-      </div>`).join('');
+    <div class="bc-svc-item">
+      <span class="bc-svc-name">${s.name}</span>
+      <div style="display:flex;align-items:center;gap:6px">
+        <span class="bc-svc-price">₹${s.price.toLocaleString()}</span>
+        <button class="bc-svc-remove" onclick="toggleService(${s.id})">✕</button>
+      </div>
+    </div>`).join('');
   }
 }
 
@@ -667,18 +976,15 @@ function toggleFav(btn) {
   btn.textContent = btn.classList.contains('liked') ? '❤️ Saved' : '🤍 Save';
 }
 function shareAlert() { alert('Share feature — coming soon! 📤'); }
-function callAlert()  { alert('Calling Glam Studio: +91 98400 12345 📞'); }
-function dirAlert()   { alert('Opening directions to T.Nagar! 🗺'); }
+function callAlert() { alert('Calling Glam Studio: +91 98400 12345 📞'); }
+function dirAlert() { window.open('https://maps.google.com/?q=T.Nagar+Chennai','_blank'); }
 
 /* ─── INIT ─── */
+selectedDate = new Date().toDateString();
 renderServices();
 renderDates('availDates');
 renderDates('bcDates');
 renderTimeSlots();
-// auto select today
-selectedDate = new Date().toDateString();
-renderDates('availDates');
-renderDates('bcDates');
 </script>
 </body>
 </html>
