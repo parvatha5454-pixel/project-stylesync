@@ -233,6 +233,34 @@ img{display:block;max-width:100%}
 }
 @media(max-width:600px){
   .nav-links{display:none}
+.nav-links.mobile-open {
+  display: flex !important;
+  flex-direction: column;
+  align-items: flex-start;
+  position: fixed;
+  top: 70px; left: 0; right: 0;
+  background: rgba(255,248,240,0.98);
+  backdrop-filter: blur(18px);
+  border-bottom: 1px solid var(--border);
+  padding: 16px 5% 24px;
+  box-shadow: var(--shadow-md);
+  z-index: 99;
+  gap: 0;
+}
+.nav-links.mobile-open li,
+.nav-links.mobile-open a {
+  width: 100%;
+  padding: 12px 0;
+  font-size: 1rem;
+  color: var(--plum);
+  border-bottom: 1px solid var(--border);
+}
+.nav-links.mobile-open .nav-cta {
+  margin-top: 16px;
+  text-align: center;
+  border-bottom: none;
+}
+.nav-mobile-btn { display: block; }
   .gallery{grid-template-columns:1fr;grid-template-rows:220px;height:220px}
   .gallery-thumb{display:none}
   .about-highlights{grid-template-columns:repeat(3,1fr)}
@@ -245,7 +273,7 @@ img{display:block;max-width:100%}
 
 <!-- NAV -->
 <nav class="nav">
-  <a href="index.html" class="nav-logo">
+  <a href="stylesync-home.html" class="nav-logo">
     <div class="nav-logo-icon">✦</div>
     Style<span>Sync</span>
   </a>
@@ -255,6 +283,7 @@ img{display:block;max-width:100%}
     <li><a href="stylesync-quiz.html">AI Stylist</a></li>
     <a href="#book" class="nav-cta">Book Now</a>
   </ul>
+  <button class="nav-mobile-btn" onclick="document.querySelector('.nav-links').classList.toggle('mobile-open');this.textContent=this.textContent==='☰'?'✕':'☰'">☰</button>
 </nav>
 
 <!-- GALLERY -->
@@ -289,7 +318,7 @@ img{display:block;max-width:100%}
     <!-- SALON HEADER -->
     <div class="salon-header fade-up">
       <div class="breadcrumb">
-        <a href="stylesync-home.html">Home</a>
+        <a href="index.html">Home</a>
         <span class="breadcrumb-sep">›</span>
         <a href="stylesync-listing.html">Salons</a>
         <span class="breadcrumb-sep">›</span>
